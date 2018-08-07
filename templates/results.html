@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}
+{{super()}}
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript">
+      google.charts.load('current', {'packages':['table']});
+      google.charts.setOnLoadCallback(drawTable);
+
+      function drawTable() {
+          //var jsonData = '{"cols":[{"type":"string","label":"File name","id":"filename"},{"type":"string","label":"Column name","id":"column"},{"type":"string","label":"Line No.","id":"line"},{"type":"string","label":"Error","id":"error"}],"rows":[{"c":[{"v":"SamplesSheet.csv"},{"v":"Sample_Name"},{"v":"1"},{"v":"\'KDSC_76\' does not match \'^[a-zA-Z0-9-]+$\'"}]},{"c":[{"v":"SamplesSheet.csv"},{"v":"index"},{"v":"1"},{"v":"\' TAAGGCGA\' does not match \'^[ATCG]+$|^SI-GA-[A-Z][0-9]+$\'"}]},{"c":[{"v":"SamplesSheet.csv"},{"v":"Sample_Name"},{"v":"3"},{"v":"\'KDSC_78b\' does not match \'^[a-zA-Z0-9-]+$\'"}]},{"c":[{"v":"SamplesSheet.csv"},{"v":"Sample_Name"},{"v":"4"},{"v":"\'KDSC_83\' does not match \'^[a-zA-Z0-9-]+$\'"}]},{"c":[{"v":"SamplesSheet.csv"},{"v":"Sample_Name"},{"v":"5"},{"v":"\'KDSC_85\' does not match \'^[a-zA-Z0-9-]+$\'"}]},{"c":[{"v":"SamplesSheet.csv"},{"v":"Sample_Name"},{"v":"6"},{"v":"\'KDSC_86\' does not match \'^[a-zA-Z0-9-]+$\'"}]},{"c":[{"v":"SamplesSheet.csv"},{"v":"index"},{"v":"7"},{"v":"\' CTCTCTAC\' does not match \'^[ATCG]+$|^SI-GA-[A-Z][0-9]+$\'"}]},{"c":[{"v":"metadata_file.csv"},{"v":"sample_submitter_id"},{"v":"2"},{"v":"\'KDSC_77\' does not match \'^[a-zA-Z0-9-]+$\'"}]},{"c":[{"v":"metadata_file.csv"},{"v":"email_id"},{"v":"3"},{"v":"\'c.sibley#imperial.ac.uk\' does not match \'\\\\\\\\S+\\\\\\\\@\\\\\\\\S+\\\\\\\\.\\\\\\\\w+\'"}]}]}';
+
+          var jsonData = {{ jsonData|safe }};
+          var data = new google.visualization.DataTable(jsonData);
+
+          var table = new google.visualization.Table(document.getElementById('table_div'));
+
+          table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
+      }
+    </script>
+{% endblock %}
+
+{% block page_content %}
+<div id="table_div"></div>
+{% endblock %}

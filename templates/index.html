@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page_content %}
+<div class="page-header">
+  <h1>{{ title_name }}</h1>
+  {% if metadata_files and samplesheet_file  %}
+    <h2>Metadata validation run</h2>
+  {% else %}
+    <h2>Upload input files for metadata validation</h2>
+  {% endif %}
+
+{{ wtf.quick_form(form) }}
+  {% if metadata_files and samplesheet_file  %}
+      <h3>Metadata csv file</h3>
+        <ul>
+        {% for file in metadata_files %}
+          <li>{{ file }}</li>
+        {% endfor %}
+        </ul>
+      <h3>Samplesheet file</h3>
+       <ul>
+         <li>{{ samplesheet_file }} </li>
+       </ul>
+  {% endif %}
+</div>
+
+{% endblock %}
