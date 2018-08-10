@@ -1,3 +1,4 @@
+import os
 import cherrypy
 from app import app
 
@@ -13,4 +14,5 @@ def run_server(app,hostname,port=5000):
   cherrypy.engine.block()
 
 if __name__ == "__main__":
-  run_server(app=app,hostname='0.0.0.0')
+  run_server(app=app,
+             hostname=os.environ['HOSTNAME'])
