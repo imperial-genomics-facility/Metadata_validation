@@ -4,3 +4,5 @@ jinja2
 flask
 flask_bootstrap
 flask_wtf
+gviz_api
+jsonschema
