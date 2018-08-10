@@ -7,9 +7,8 @@ Use the following docker image to run this server
 
   [avikdatta/metadata_validation_docker](https://hub.docker.com/r/avikdatta/metadata_validation_docker/)
   
-  ```<p>
-  docker pull avikdatta/metadata_validation_docker
-  </p>
+  ```
+  <p>docker pull avikdatta/metadata_validation_docker</p>
   ```
 
 ### Required env variables
