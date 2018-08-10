@@ -1,0 +1,6 @@
+cherrypy
+pandas
+jinja2
+flask
+flask_bootstrap
+flask_wtf
