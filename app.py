@@ -28,6 +28,14 @@ class ValidationForm(FlaskForm):
                    )
   submit = SubmitField('Validate metadata')
 
+@app.error_handlers(404)
+def page_not_found(e):
+  return render_template('404.html')
+
+@app.error_handlers(500)
+def internal_server_error(e):
+  return render_template('500.html')
+
 @app.route('/results',methods=['GET','POST'])
 def results(json_data):
   return render_template('results.html',jsonData=json_data)
