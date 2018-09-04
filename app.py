@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 from wtforms import FileField,SubmitField,MultipleFileField
 from wtforms.validators import DataRequired,Regexp
 from igf_data.utils.fileutils import get_temp_dir,remove_dir
-from igf_data.utils.tools.metadata_validation import Validate_project_and_samplesheet_metadata
+from igf_data.utils.validation_check.metadata_validation import Validate_project_and_samplesheet_metadata
 
 app=Flask(__name__,instance_path=os.environ['FLASK_INSTANCE_PATH'])
 app.config['SECRET_KEY']=os.environ['FLASK_SECRET_KEY']
