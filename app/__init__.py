@@ -19,5 +19,13 @@ def create_app(config_name):
   db.init_app(app)
   
   ## Load Blueprint modules
+  from .metadata import metadata as metadata_blueprint
+  app.register_blueprint(metadata_blueprint)
+  from .samplesheet import samplesheet as samplesheet_blueprint
+  app.register_blueprint(samplesheet_blueprint)
+  from .validation import validation as validation_blueprint
+  app.register_blueprint(validation_blueprint)
+  from .covcalculator import covcalculator as covcalculator_blueprint
+  app.register_blueprint(covcalculator_blueprint)
 
   return app

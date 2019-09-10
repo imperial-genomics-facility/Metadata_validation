@@ -1,5 +1,5 @@
 from flask import render_template
-from . import samplesheet 
+from . import samplesheet
 
 @samplesheet.route('/')
 def samplesheet_home():
