@@ -1,0 +1,4 @@
+## Config
+
+class Config:
+  pass
