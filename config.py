@@ -4,6 +4,9 @@ BASEDIR = os.path.dirname(__file__)
 
 class Config:
   SECRET_KEY = os.environ.get('SECRET_KEY') or uuid.uuid4().hex()         # default uuid, if not provided
+  FLASK_INSTANCE_PATH = os.environ.get('FLASK_INSTANCE_PATH') or BASEDIR
+  SAMPLESHEET_SCHEMA = os.environ.get('SAMPLESHEET_SCHEMA') or None
+  METADATA_SCHEMA = os.environ.get('METADATA_SCHEMA') or METADATA_SCHEMA
 
   @staticmethod
   def init_app(app):
