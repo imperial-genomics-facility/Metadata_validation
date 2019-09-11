@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block head%}
+{{ super() }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script charset="utf-8" type="text/javascript">
+  $(document).ready(function() {
+    $('#libraryTypeSection').hide();
+    $('#genomeCovSection').hide();
+    $('#customReadsSection').hide();
+    $('#choose_assay').change(function(){
+      var radioValue = $("input[name=choose_assay]:checked").val();
+      console.log(radioValue);
+      if(radioValue == 'library_type'){
+        $('#libraryTypeSection').show();
+      }
+      if(radioValue == 'genome_cov'){
+        $('#genomeCovSection').show();
+      }
+      if(radioValue == 'custom_read'){
+        $('#customReadsSection').show();
+      }
+    });
+  });
+</script>
+{% endblock %}
+
+
+{% block page_content %}
+{{ super() }}
+<h1>Sequencing Coverage calculator</h1>
+<p>This is a sequencing coverage calculation tools by IGF team. Always verify your results using the official <a href="http://emea.support.illumina.com/downloads/sequencing_coverage_calculator.html?langsel=/gb/">Sequencing Coverage Calculator</a> before finalising experiment design.</p>
+<form method="POST" class="container-fluid">
+  {{ form.hidden_tag() }}
+  <h4 >Step 1: Select platform</h3>
+  {{ form.platform }}
+  <h4>Step 2: Select read count settings</h3>
+  {{ form.choose_assay }}
+  <div id='libraryTypeSection'>
+    <h5>Option 2.1: Use recommended read counts per sample for know library types</h4>
+    {{ form.assay_type }}
+  </div>
+  <div id='genomeCovSection'>
+    <h5>Option 2.2: Use genome size and coverage to calculate reads per sample</h4>
+    <p>Genome size in MB:
+      {{ form.genome_size }}
+    </p>
+    <p>Coverage:
+    {{ form.coverage }}
+    </p>
+  </div>
+  <div id='customReadsSection'>
+  <h5>Option 2.3: Use custom read counts per samples</h4>
+  {{ form.expected_read_count }}
+  </div>
+  <h4>Step 3: Select output mode</h3>
+  {{ form.choose_sample_or_lane }}
+  {{ form.samples }}
+  <h4>Calculate coverage</h3>
+  {{ form.submit() }}
+</form>
+{% if platform != ''%}
+  {% if data_table !='' %}
+  <h4>Coverage stats</h3>
+  <div class="table-responsive-md">
+  {{ data_table|safe }}
+  </div>
+  {% endif %}
+{% endif %}
+
+{% endblock %}

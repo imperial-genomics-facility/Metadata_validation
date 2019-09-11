@@ -1,5 +1,7 @@
+import os
 from flask import render_template
 from . import validation
+from flask import current_app as app
 from flask_wtf import FlaskForm
 from wtforms.fields import FileField,SubmitField,MultipleFileField
 from wtforms.validators import DataRequired
@@ -51,10 +53,10 @@ def validation_home():
         Validate_project_and_samplesheet_metadata(\
           samplesheet_file=new_samplesheet,
           metadata_files=new_metadata_list,
-          samplesheet_schema=app.config['SAMPLESHEET_SCHEMA'],
-          metadata_schema=app.config['METADATA_SCHEMA'])
+          samplesheet_schema=app.config.get('SAMPLESHEET_SCHEMA'),
+          metadata_schema=app.config.get('METADATA_SCHEMA'))
       json_data = vp.convert_errors_to_gviz()
       remove_dir(temp_dir)
       return render_template('validation/results.html',jsonData=json_data)
-  return render_template('validation/validate_metadata.html',form=form)
+  return render_template('validation/validate_metadata.html')
 
