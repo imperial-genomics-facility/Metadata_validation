@@ -13,7 +13,7 @@ from igf_data.utils.validation_check.metadata_validation import Validate_project
 class ValidationForm(FlaskForm):
   metadata_file = \
     MultipleFileField(\
-      'Metadata csv file',
+      'Metadata csv file(s)',
       validators=[DataRequired(),FileAllowed(['csv'])])
   samplesheet_file = \
     FileField(\
