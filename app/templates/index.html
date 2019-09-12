@@ -1,5 +1,18 @@
 {% extends "base.html" %}
 
+{% block title %}IGFTools - Home{% endblock %}
+
+{% block head %}
+{{ super() }}
+<script>
+    $(document).ready(function () {
+      $(".nav li").removeClass("active");
+      $('#home_nav').addClass('active');
+    });
+  </script>
+{% endblock %}
+
+
 {% block body %}
 {{ super() }}
 <div class="container-fluid">

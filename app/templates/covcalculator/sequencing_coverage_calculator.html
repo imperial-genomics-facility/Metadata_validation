@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
+{% block title %}IGFTools - Coverage calculator{% endblock %}
+
 {% block head%}
 {{ super() }}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script charset="utf-8" type="text/javascript">
   $(document).ready(function() {
     $('#libraryTypeSection').hide();
@@ -23,6 +24,12 @@
     });
   });
 </script>
+<script>
+    $(document).ready(function () {
+      $(".nav li").removeClass("active");
+      $('#covcalc_nav').addClass('active');
+    });
+  </script>
 {% endblock %}
 
 
@@ -56,7 +63,7 @@
   <h4>Step 3: Select output mode</h3>
   {{ form.choose_sample_or_lane }}
   {{ form.samples }}
-  <h4>Calculate coverage</h3>
+  <h5>Calculate coverage</h5>
   {{ form.submit() }}
 </form>
 {% if platform != ''%}

@@ -1,11 +1,12 @@
 {% extends "bootstrap/base.html" %}
 
 
-{% block title %}{% endblock %}
+{% block title %}IGFTools{% endblock %}
 
 {% block head %}
 {{ super() }}
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 {% endblock %}
 
 {% block scripts %}
@@ -25,22 +26,22 @@
   <div class="collapse navbar-collapse" id="collapsibleNavbar">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="/">Home</a>
+        <a id='home_nav' class="nav-link" href="/">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/covcalculator">Coverage calculator</a>
+        <a id='covcalc_nav' class="nav-link" href="/covcalculator">Coverage calculator</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/metadata">Metadata reformat</a>
+        <a id='metadata_nav' class="nav-link" href="/metadata">Metadata reformat</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/samplesheet">Samplesheet reformat</a>
+        <a id='samplesheet_nav' class="nav-link" href="/samplesheet">Samplesheet reformat</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/validation">Metadata Validation</a>
+        <a id='validation_nav' class="nav-link" href="/validation">Metadata Validation</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/help">Help</a>
+        <a id='help_nav' class="nav-link" href="/help">Help</a>
       </li>
       <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">

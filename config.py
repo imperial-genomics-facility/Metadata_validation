@@ -14,11 +14,11 @@ class Config:
 
 class DevConfig(Config):
   SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URI') or \
-                            os.path.join(BASEDIR,'dev_database.sqlite')
+                            'sqlite:////{0}/dev_database.sqlite'.format(BASEDIR)
 
 class TestConfig(Config):
   SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URI') or \
-                            os.path.join(BASEDIR,'test_database.sqlite')
+                            'sqlite:////{0}/dev_database.sqlite'.format(BASEDIR)
   SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class ProdConfig(Config):

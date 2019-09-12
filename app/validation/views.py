@@ -1,5 +1,5 @@
 import os
-from flask import render_template
+from flask import render_template,flash,request
 from . import validation
 from flask import current_app as app
 from flask_wtf import FlaskForm
@@ -14,18 +14,18 @@ class ValidationForm(FlaskForm):
   metadata_file = \
     MultipleFileField(\
       'Metadata csv file',
-      validators=[DataRequired(),FileAllowed(['csv']),FileRequired()])
+      validators=[DataRequired(),FileAllowed(['csv'])])
   samplesheet_file = \
     FileField(\
       'Samplesheet csv file',
-      validators=[DataRequired(),FileAllowed(['csv']),FileRequired()])
+      validators=[FileAllowed(['csv']),FileRequired()])
   submit = SubmitField('Validate metadata')
 
-@validation.route('/')
+@validation.route('/',methods=['GET','POST'])
 def validation_home():
   form = ValidationForm()
   if form.validate_on_submit():
-    temp_dir = get_temp_dir(work_dir=app.instance_path)
+    temp_dir = get_temp_dir()
     new_metadata_list = list()
     for file in form.metadata_file.data:
       filename = secure_filename(file.filename)
@@ -58,5 +58,8 @@ def validation_home():
       json_data = vp.convert_errors_to_gviz()
       remove_dir(temp_dir)
       return render_template('validation/results.html',jsonData=json_data)
-  return render_template('validation/validate_metadata.html')
+  else:
+    if request.method=='POST':
+      flash('Failed input validation check')
+  return render_template('validation/validate_metadata.html',form=form)
 

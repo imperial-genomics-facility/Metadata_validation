@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 
+{% block title %}IGFTools - Help{% endblock %}
+
+{% block head %}
+{{ super() }}
+<script>
+    $(document).ready(function () {
+      $(".nav li").removeClass("active");
+      $('#help_nav').addClass('active');
+    });
+  </script>
+{% endblock %}
+
 {% block page_content %}
 <h1>Help</h1>
 {% endblock %}

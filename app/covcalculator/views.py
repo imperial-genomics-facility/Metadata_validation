@@ -70,7 +70,7 @@ class SeqrunForm(FlaskForm):
 	submit = SubmitField('Get info')
 
 
-@covcalculator.route('/')
+@covcalculator.route('/',methods=['GET','POST'])
 def covcalculator_home():
   try:
     platform = ''
@@ -244,7 +244,9 @@ def covcalculator_home():
     else:
       if request.method=='POST':
         flash('Failed: Input validation failed')
-        return redirect(url_for('covcalculator_home'))
+        return render_template(\
+             'covcalculator/sequencing_coverage_calculator.html',
+             form=form)
 
     formatted_header_list = \
       ['Output per unit',

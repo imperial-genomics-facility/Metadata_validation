@@ -1,7 +1,16 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Metadata validation -- unknown error{% endblock %}
+{% block title %}IGFTools - unknown error{% endblock %}
+
+{% block head %}
+{{ super() }}
+<script>
+    $(document).ready(function () {
+      $(".nav li").removeClass("active");
+    });
+  </script>
+{% endblock %}
 
 {% block page_content %}
 <div class="page-header">

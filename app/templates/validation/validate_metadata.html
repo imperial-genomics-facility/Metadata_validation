@@ -1,5 +1,42 @@
 {% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}IGFTools - Metadata validation{% endblock %}
+
+{% block head %}
+{{ super() }}
+<script>
+    $(document).ready(function () {
+      $(".nav li").removeClass("active");
+      $('#validation_nav').addClass('active');
+    });
+  </script>
+{% endblock %}
 
 {% block page_content %}
-<h1>Validation</h1>
+<div class="page-header">
+  {{ super() }}
+  <h1>Metadata validation</h1>
+  {% if metadata_files and samplesheet_file  %}
+    <h4>Metadata validation run</h4>
+  {% else %}
+    <h4>Upload input files for metadata validation</h4>
+  {% endif %}
+
+  {{ wtf.quick_form(form) }}
+
+  {% if metadata_files and samplesheet_file  %}
+      <h3>Metadata csv file</h3>
+        <ul>
+        {% for file in metadata_files %}
+          <li>{{ file }}</li>
+        {% endfor %}
+        </ul>
+      <h3>Samplesheet file</h3>
+       <ul>
+         <li>{{ samplesheet_file }} </li>
+       </ul>
+  {% endif %}
+</div>
+
 {% endblock %}

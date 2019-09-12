@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 
+{% block title %}IGFTools - Samplesheet reformat{% endblock %}
+
+{% block head %}
+{{ super() }}
+<script>
+    $(document).ready(function () {
+      $(".nav li").removeClass("active");
+      $('#samplesheet_nav').addClass('active');
+    });
+  </script>
+{% endblock %}
+
 {% block page_content %}
 <h1>Samplesheet</h1>
 {% endblock %}
