@@ -14,8 +14,9 @@
 {% endblock %}
 
 {% block page_content %}
+{{ super() }}
 <div class="page-header">
-  {{ super() }}
+  
   <h1>Metadata validation</h1>
   {% if metadata_files and samplesheet_file  %}
     <h4>Metadata validation run</h4>

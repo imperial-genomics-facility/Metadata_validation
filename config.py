@@ -7,6 +7,10 @@ class Config:
   FLASK_INSTANCE_PATH = os.environ.get('FLASK_INSTANCE_PATH') or BASEDIR
   SAMPLESHEET_SCHEMA = os.environ.get('SAMPLESHEET_SCHEMA') or None
   METADATA_SCHEMA = os.environ.get('METADATA_SCHEMA') or None
+  RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY') or None
+  RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY') or None
+  RECAPTCHA_API_SERVER = os.environ.get('RECAPTCHA_API_SERVER') or 'https://www.google.com/recaptcha/api/siteverify'
+  SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS') or False
 
   @staticmethod
   def init_app(app):
@@ -19,14 +23,10 @@ class DevConfig(Config):
 class TestConfig(Config):
   SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URI') or \
                             'sqlite:////{0}/dev_database.sqlite'.format(BASEDIR)
-  SQLALCHEMY_TRACK_MODIFICATIONS = False
+
 
 class ProdConfig(Config):
   SQLALCHEMY_DATABASE_URI = os.environ.get('PROD_DATABASE_URI') or None
-  USE_RECAPTCHA = os.environ.get('USE_RECAPTCHA') or False                # reCAPTCHA is optional for prod
-  RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY') or None
-  RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY') or None
-  RECAPTCHA_API_SERVER = os.environ.get('RECAPTCHA_API_SERVER') or 'https://www.google.com/recaptcha/api/siteverify'
 
 class CloudConfiig(ProdConfig):
   USE_RECAPTCHA = True                                                     # use reCAPTCHA on cloud

@@ -1,13 +1,14 @@
 from . import samplesheet
-import io,os,logging
+from .utils import run_samplesheet_reformatting
+import os,logging
 from flask import render_template,flash,Response,request
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm,RecaptchaField
 from wtforms import widgets
 from wtforms.fields import FileField,SubmitField,SelectMultipleField
 from flask_wtf.file import FileAllowed,FileRequired
 from werkzeug.utils import secure_filename
 from igf_data.utils.fileutils import get_temp_dir,remove_dir
-from igf_data.process.metadata_reformat.reformat_samplesheet_file import Reformat_samplesheet_file
+
 
 class MultiCheckboxField(SelectMultipleField):
   widget = widgets.TableWidget()
@@ -25,25 +26,15 @@ class SamplesheetForm(FlaskForm):
         choices=[('revcomp_index1','Rev comp I7'),
                  ('revcomp_index2','Rev comp I5'),
                  ('remove_adapters','Remove Adapters')])
+  recaptcha = RecaptchaField()
   submit = SubmitField('Reformat samplesheet')
 
 
-def convert_file_to_stream(infile):
-  try:
-    data = ''
-    with open(infile,'r') as file_i:
-      with io.StringIO() as file_o:
-        for line in file_i:
-          file_o.write(line)
-
-        data = file_o.getvalue()
-    return data
-  except Exception as e:
-    raise ValueError('Failedto convert file to stream, error: {0}'.format(e))
 
 @samplesheet.route('/',methods=['GET','POST'])
 def samplesheet_home():
   try:
+    csv_data = ''
     form = SamplesheetForm()
     selected_options = ''
     revcomp_index1 = False
@@ -79,17 +70,17 @@ def samplesheet_home():
          'rev comp i5':revcomp_index2,
          'remove adaptors':remove_adapters
         })
-      re_samplesheet = \
-        Reformat_samplesheet_file( \
-          infile=new_samplesheet_file,
-          revcomp_index1=revcomp_index1,
-          revcomp_index2=revcomp_index2,
-          remove_adapters=remove_adapters)
-      re_samplesheet.\
-      reformat_raw_samplesheet_file(\
-        output_file=samplesheet_output)
-      csv_data = \
-        convert_file_to_stream(infile=samplesheet_output)
+      try:
+        csv_data = \
+          run_samplesheet_reformatting(\
+            samplesheet_file=new_samplesheet_file,
+            output_dir=temp_dir,
+            revcomp_index1=revcomp_index1,
+            revcomp_index2=revcomp_index2,
+            remove_adapters=remove_adapters)
+      except Exception as e:
+        flash('Failed samplesheet reformatting')
+        logging.warning(e)
       return \
         Response(\
                csv_data,

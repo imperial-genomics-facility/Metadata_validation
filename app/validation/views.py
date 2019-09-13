@@ -1,8 +1,8 @@
-import os
+import os,logging
 from flask import render_template,flash,request
 from . import validation
 from flask import current_app as app
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm,RecaptchaField
 from wtforms.fields import FileField,SubmitField,MultipleFileField
 from wtforms.validators import DataRequired
 from flask_wtf.file import FileAllowed,FileRequired
@@ -19,6 +19,7 @@ class ValidationForm(FlaskForm):
     FileField(\
       'Samplesheet csv file',
       validators=[FileAllowed(['csv']),FileRequired()])
+  recaptcha = RecaptchaField()
   submit = SubmitField('Validate metadata')
 
 @validation.route('/',methods=['GET','POST'])
@@ -49,6 +50,7 @@ def validation_home():
         os.path.join(\
           temp_dir,
           samplesheet_filename)
+      logging.warning(form.recaptcha.errors)
       vp = \
         Validate_project_and_samplesheet_metadata(\
           samplesheet_file=new_samplesheet,
