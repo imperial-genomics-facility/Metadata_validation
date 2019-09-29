@@ -29,7 +29,15 @@ class ProdConfig(Config):
   SQLALCHEMY_DATABASE_URI = os.environ.get('PROD_DATABASE_URI') or None
 
 class CloudConfiig(ProdConfig):
-  USE_RECAPTCHA = True                                                     # use reCAPTCHA on cloud
+  SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI') or None
+
+  @classmethod
+  def init_app(cls,app):
+    import logging
+    from logging import StreamHandler
+    file_handler = StreamHandler()
+    file_handler.setLevel(logging.INFO)
+    app.logger.addHandler(file_handler)
 
 config = {'development':DevConfig,
           'testing':TestConfig,
