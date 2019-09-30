@@ -14,12 +14,18 @@
       console.log(radioValue);
       if(radioValue == 'library_type'){
         $('#libraryTypeSection').show();
+        $('#genomeCovSection').hide();
+        $('#customReadsSection').hide();
       }
       if(radioValue == 'genome_cov'){
         $('#genomeCovSection').show();
+        $('#libraryTypeSection').hide();
+        $('#customReadsSection').hide();
       }
       if(radioValue == 'custom_read'){
         $('#customReadsSection').show();
+        $('#libraryTypeSection').hide();
+        $('#genomeCovSection').hide();
       }
     });
   });
