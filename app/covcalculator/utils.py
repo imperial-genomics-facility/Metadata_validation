@@ -37,27 +37,29 @@ def calculate_expected_samples(genome_size,coverage,lanes_count,is_pe,
     raise ValueError('Failed to calculate expected samples, error: {0}'.format(e))
 
 def calculate_expected_lanes_for_known_library(recommended_clusters,samples_count,
-                                               cluster_size,max_samples=96):
+                                               cluster_size,is_sc,read_length,max_samples=96):
   try:
     samples_per_lanes = cluster_size / recommended_clusters
     required_lane_per_sample = recommended_clusters / cluster_size
-    if samples_per_lanes > max_samples:
+    output_per_unit = cluster_size * read_length
+    if samples_per_lanes > max_samples and is_sc==0:
         samples_per_lanes = max_samples
     expected_lanes = samples_count / int(samples_per_lanes)
     if expected_lanes > int(expected_lanes):
       expected_lanes = int(expected_lanes) + 1
-    return required_lane_per_sample,int(samples_per_lanes),samples_count,expected_lanes
+    return required_lane_per_sample,int(samples_per_lanes),samples_count,expected_lanes,output_per_unit
   except Exception as e:
     raise ValueError('Failed to calculate expected lanes for know library, error: {0}'.format(e))
 
 def calculate_expected_samples_for_known_library(recommended_clusters,lanes_count,
-                                                 cluster_size,max_samples=96):
+                                                 cluster_size,is_sc,read_length,max_samples=96):
   try:
     samples_per_lanes = cluster_size / recommended_clusters
     required_lane_per_sample = recommended_clusters / cluster_size
-    if samples_per_lanes > max_samples:
+    output_per_unit = cluster_size * read_length
+    if samples_per_lanes > max_samples and is_sc==0:
         samples_per_lanes = max_samples
     expected_samples = samples_per_lanes * lanes_count
-    return required_lane_per_sample,int(samples_per_lanes),lanes_count,int(expected_samples)
+    return required_lane_per_sample,int(samples_per_lanes),lanes_count,int(expected_samples),output_per_unit
   except Exception as e:
     raise ValueError('Failed to calculate expected samples for know library, error: {0}'.format(e))

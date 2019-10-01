@@ -58,7 +58,7 @@ class SeqrunForm(FlaskForm):
 		RadioField(\
 			choices=[\
 				('lane_number','I will sequence following lanes'),
-				('sample_number','I have fixed number of samples')],
+				('sample_number','I have fixed number of samples (or cells)')],
 			default='lane_number',
 			id='choose_sample_or_lane')
 	samples = \
@@ -87,6 +87,7 @@ def covcalculator_home():
     expected_read_count = 0
     recommended_clusters = 0
     data_table = ''
+    is_sc = 0
     form = SeqrunForm()
     if form.validate_on_submit():
       platform = form.platform.data
@@ -97,6 +98,7 @@ def covcalculator_home():
       choose_sample_or_lane = form.choose_sample_or_lane.data
       cluster_size = platform.clusters
       is_pe = platform.is_pe
+      is_sc = assay_type.is_sc
       read_length = platform.read_length
       choose_assay = form.choose_assay.data
       expected_read_count = form.expected_read_count.data
@@ -109,48 +111,94 @@ def covcalculator_home():
           flash('Ignoring genome size, coverage and expected read counts for known library type')
 
         if choose_sample_or_lane == 'sample_number':
-          required_lane_per_sample,samples_per_lanes,samples_count,expected_lanes = \
+          required_lane_per_sample,samples_per_lanes,samples_count,expected_lanes,output_per_unit = \
             calculate_expected_lanes_for_known_library(\
               recommended_clusters=recommended_clusters,
               samples_count=samples,
-              cluster_size=cluster_size)
-          data_table = \
-            [{'Platform name':platform.name,
-              'Library type': assay_type.assay_name,
-              'Recommended cluster count per sample': assay_type.read_count,
-              'Required lane per sample':required_lane_per_sample,
-              'Samples per lane':samples_per_lanes,
-              'Requested samples':samples_count,
-              'Expected lanes':expected_lanes}]
-          col_order = \
-            ['Library type',
-             'Recommended cluster count per sample',
-             'Required lane per sample',
-             'Samples per lane',
-             'Requested samples',
-             'Expected lanes']
+              cluster_size=cluster_size,
+              read_length=read_length,
+              is_sc=is_sc)
+          if is_sc==0:
+            data_table = \
+              [{'Platform name':platform.name,
+                'Platform cluster count':cluster_size,
+                'Library type': assay_type.assay_name,
+                'Recommended cluster count per sample': assay_type.read_count,
+                'Required lane per sample':required_lane_per_sample,
+                'Samples per lane':samples_per_lanes,
+                'Requested samples':samples_count,
+                'Expected lanes':expected_lanes}]
+            col_order = \
+              ['Platform cluster count',
+               'Library type',
+               'Recommended cluster count per sample',
+               'Required lane per sample',
+               'Samples per lane',
+               'Requested samples',
+               'Expected lanes']
+          else:
+            data_table = \
+              [{'Platform name':platform.name,
+                'Platform cluster count':cluster_size,
+                'Library type': assay_type.assay_name,
+                'Recommended cluster count per cell': assay_type.read_count,
+                'Required lane per cell':required_lane_per_sample,
+                'Cells per lane':samples_per_lanes,
+                'Requested cells':samples_count,
+                'Expected lanes':expected_lanes}]
+            col_order = \
+              ['Platform cluster count',
+               'Library type',
+               'Recommended cluster count per cell',
+               'Required lane per cell',
+               'Cells per lane',
+               'Requested cells',
+               'Expected lanes']
           flash('Success')
         elif choose_sample_or_lane == 'lane_number':
-          required_lane_per_sample,samples_per_lanes,lanes_count,expected_samples = \
+          required_lane_per_sample,samples_per_lanes,lanes_count,expected_samples,output_per_unit = \
             calculate_expected_samples_for_known_library(\
               recommended_clusters=recommended_clusters,
               lanes_count=samples,
-              cluster_size=cluster_size)
-          data_table = \
-            [{'Platform name':platform.name,
-              'Library type': assay_type.assay_name,
-              'Recommended cluster count per sample': assay_type.read_count,
-              'Required lane per sample':required_lane_per_sample,
-              'Samples per lane':samples_per_lanes,
-              'Requested lanes':lanes_count,
-              'Expected samples':expected_samples}]
-          col_order = \
-            ['Library type',
-             'Recommended cluster count per sample',
-             'Required lane per sample',
-             'Samples per lane',
-             'Requested lanes',
-             'Expected samples']
+              cluster_size=cluster_size,
+              read_length=read_length,
+              is_sc=is_sc)
+          if is_sc==0:
+            data_table = \
+              [{'Platform name':platform.name,
+                'Platform cluster count':cluster_size,
+                'Library type': assay_type.assay_name,
+                'Recommended cluster count per sample': assay_type.read_count,
+                'Required lane per sample':required_lane_per_sample,
+                'Samples per lane':samples_per_lanes,
+                'Requested lanes':lanes_count,
+                'Expected samples':expected_samples}]
+            col_order = \
+              ['Platform cluster count',
+               'Library type',
+               'Recommended cluster count per sample',
+               'Required lane per sample',
+               'Samples per lane',
+               'Requested lanes',
+               'Expected samples']
+          else:
+            data_table = \
+              [{'Platform name':platform.name,
+                'Platform cluster count':cluster_size,
+                'Library type': assay_type.assay_name,
+                'Recommended cluster count per cell': assay_type.read_count,
+                'Required lane per cell':required_lane_per_sample,
+                'Cells per lane':samples_per_lanes,
+                'Requested lanes':lanes_count,
+                'Expected cells':expected_samples}]
+            col_order = \
+              ['Platform cluster count',
+               'Library type',
+               'Recommended cluster count per cell',
+               'Required lane per cell',
+               'Cells per lane',
+               'Requested lanes',
+               'Expected cells']
           flash('Success')
       elif choose_assay == 'genome_cov':
         if expected_read_count > 0:
@@ -220,10 +268,11 @@ def covcalculator_home():
           flash('Failed: Missing required read counts per sample')
         else:
           if choose_sample_or_lane == 'sample_number':
-            required_lane_per_sample,samples_per_lanes,samples_count,expected_lanes = \
+            required_lane_per_sample,samples_per_lanes,samples_count,expected_lanes,output_per_unit = \
               calculate_expected_lanes_for_known_library(\
                 recommended_clusters=expected_read_count,
                 samples_count=samples,
+                is_sc=0,
                 cluster_size=cluster_size)
             data_table = \
               [{'Platform name':platform.name,
@@ -250,8 +299,13 @@ def covcalculator_home():
 
     formatted_header_list = \
       ['Output per unit',
+       'Platform cluster count',
        'Requested cluster count per sample',
-       'Recommended cluster count per sample']
+       'Recommended cluster count per sample',
+       'Cells per lane',
+       'Expected cells',
+       'Requested cluster count per cell',
+       'Recommended cluster count per cell']
     if data_table !='' and isinstance(data_table,list):
       data_table = pd.DataFrame(data_table).set_index('Platform name')
       for header in formatted_header_list:

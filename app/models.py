@@ -21,6 +21,7 @@ class Assay_type(db.Model):
   id = db.Column(db.Integer,primary_key=True)
   assay_name = db.Column(db.String(30),unique=True)
   read_count = db.Column(db.Integer)
+  is_sc = db.Column(db.Integer)
 
   def __repr__(self):
     return '<Assay_type %r>' % self.assay_name
