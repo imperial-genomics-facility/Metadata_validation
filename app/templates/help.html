@@ -13,5 +13,15 @@
 {% endblock %}
 
 {% block page_content %}
-<h1>Help</h1>
+{{ super() }}
+<div class="container-fluid">
+  <h1>Help</h1>
+  <h2>Sequencing coverage calculator</h2>
+  <p>Please check the official <a href="http://emea.support.illumina.com/downloads/sequencing_coverage_calculator.html?langsel=/gb/">Sequencing Coverage Calculator</a> tool to verify your results before finalising the experiment design. 
+    We also maintain a list of <a href="https://www.imperial.ac.uk/medicine/research-and-impact/facilities/genomics-facility/faq/coverage-and-read-recommendations/">coverage and read recommendations</a> for our genomics facility users based on scientific publications.</p>
+  <p>Please check this short video regarding the usage information for the coverage calculator tools.</p>
+  <div style="position:relative; left:50px">
+    <img src="static/covcalculator.gif" height="800" style="border:1px solid black" >
+  </div>
+</div>
 {% endblock %}
