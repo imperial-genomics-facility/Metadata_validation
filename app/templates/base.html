@@ -78,6 +78,23 @@
   {% block page_content %}{% endblock %}
   {% block footer %}
   <footer class="footer" style="height:30px;">
+    {% if cookies_check() %}
+      {# then user has already consented so no requirement for consent banner #}
+    {% else %}
+      {# show a cookie consent banner #}
+      <div id="cookie-consent-container" class="container-fluid bg-dark text-center fixed-bottom">
+        <p class="text-white">By using this website, you are agreeing to allow this website to use cookies.
+        <button class="btn btn-dark text-white" id="cookie-consent">I agree, dismiss this banner</button>
+      </p>
+      </div>
+      <script>
+        var fn = function () {
+          document.cookie = "cookie_consent=true";
+          document.getElementById('cookie-consent-container').hidden = true;
+        };
+        document.getElementById('cookie-consent').onclick = fn;
+      </script>
+    {% endif %}
       <div class="container-fluid bg-dark text-center fixed-bottom">
         <span class="text-muted text-white ">© 2019 Copyright: <a href="#" class="text-blue">IGF</a></span>
       </div>
