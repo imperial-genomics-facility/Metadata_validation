@@ -67,6 +67,12 @@ class SeqrunForm(FlaskForm):
 			default=1,
 			validators=[DataRequired(),NumberRange()],
 			id='samples')
+	max_samples = \
+		IntegerField(\
+			label='max samples per flowcell',
+			default=96,
+			validators=[DataRequired(),NumberRange()],
+			id='max_samples')
 	submit = SubmitField('Get info')
 
 
@@ -88,6 +94,7 @@ def covcalculator_home():
     recommended_clusters = 0
     data_table = ''
     is_sc = 0
+    max_samples = 0
     form = SeqrunForm()
     if form.validate_on_submit():
       platform = form.platform.data
@@ -103,6 +110,7 @@ def covcalculator_home():
       choose_assay = form.choose_assay.data
       expected_read_count = form.expected_read_count.data
       recommended_clusters = assay_type.read_count
+      max_samples = form.max_samples.data
       col_order = ['Platform name']
       if choose_assay == 'library_type':
         if genome_size >0 or \
@@ -117,7 +125,9 @@ def covcalculator_home():
               samples_count=samples,
               cluster_size=cluster_size,
               read_length=read_length,
-              is_sc=is_sc)
+              is_sc=is_sc,
+              max_samples=max_samples
+              )
           if is_sc==0:
             data_table = \
               [{'Platform name':platform.name,
@@ -162,7 +172,8 @@ def covcalculator_home():
               lanes_count=samples,
               cluster_size=cluster_size,
               read_length=read_length,
-              is_sc=is_sc)
+              is_sc=is_sc,
+              max_samples=max_samples)
           if is_sc==0:
             data_table = \
               [{'Platform name':platform.name,
@@ -208,14 +219,15 @@ def covcalculator_home():
           flash('Failed: Missing genome size and coverage')
         else:
           if choose_sample_or_lane == 'sample_number':
-            output_per_unit,required_lane_per_sample,samples_per_lanes,samples_count,expected_lanes = \
+            output_per_unit,required_lane_per_sample,samples_per_lanes,samples_count,expected_lanes,expected_bases_per_sample = \
               calculate_expected_lanes(\
                 genome_size=genome_size,
                 coverage=coverage,
                 samples_count=int(samples),
                 cluster_size=int(cluster_size),
                 is_pe=int(is_pe),
-                read_length=int(read_length))
+                read_length=int(read_length),
+                max_samples=max_samples)
             data_table = \
               [{'Platform name':platform.name,
                 'Genome size (MB)': genome_size,
@@ -233,14 +245,15 @@ def covcalculator_home():
                'Expected lanes']
             flash('Success')
           elif choose_sample_or_lane == 'lane_number':
-            output_per_unit,required_lane_per_sample,samples_per_lanes,lanes_count,expected_samples = \
+            output_per_unit,required_lane_per_sample,samples_per_lanes,lanes_count,expected_samples,expected_bases_per_sample = \
               calculate_expected_samples(\
                 genome_size=genome_size,
                 coverage=coverage,
                 lanes_count=samples,
                 cluster_size=cluster_size,
                 read_length=read_length,
-                is_pe=is_pe)
+                is_pe=is_pe,
+                max_samples=max_samples)
             data_table = \
               [{'Platform name':platform.name,
                 'Genome size (MB)': genome_size,
@@ -273,7 +286,8 @@ def covcalculator_home():
                 recommended_clusters=expected_read_count,
                 samples_count=samples,
                 is_sc=0,
-                cluster_size=cluster_size)
+                cluster_size=cluster_size,
+                max_samples=max_samples)
             data_table = \
               [{'Platform name':platform.name,
                 'Requested cluster count per sample':expected_read_count,
