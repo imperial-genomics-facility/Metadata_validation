@@ -286,6 +286,7 @@ def covcalculator_home():
                 recommended_clusters=expected_read_count,
                 samples_count=samples,
                 is_sc=0,
+                read_length=read_length,
                 cluster_size=cluster_size,
                 max_samples=max_samples)
             data_table = \
@@ -293,14 +294,14 @@ def covcalculator_home():
                 'Requested cluster count per sample':expected_read_count,
                 'Required lane per sample':required_lane_per_sample,
                 'Samples per lane':samples_per_lanes,
-                'Requested lanes':samples_count,
-                'Expected samples':expected_lanes}]
+                'Requested samples':samples_count,
+                'Expected lanes':expected_lanes}]
             col_order = \
               ['Requested cluster count per sample',
                'Required lane per sample',
                'Samples per lane',
-               'Requested lanes',
-               'Expected samples']
+               'Requested samples',
+               'Expected lanes']
             flash('Success')
           else:
             flash('Failed: Select output mode as sample, for custom read count per sample')

@@ -68,7 +68,6 @@ class Covcalculator_utils1(unittest.TestCase):
         read_length=150,
         is_pe=1,
         max_samples=96)
-    print(output_per_unit,required_lane_per_sample,samples_per_lanes,lanes_count,expected_samples,expected_bases_per_sample)
     self.assertTrue(\
       (output_per_unit==312500000*150*2) & \
       (round(required_lane_per_sample,4)==0.003) & \
@@ -94,6 +93,22 @@ class Covcalculator_utils1(unittest.TestCase):
       (samples_count==10) & \
       (expected_lanes==4) & \
       (expected_bases_per_sample==3200*1000000*10))
+    output_per_unit,required_lane_per_sample,samples_per_lanes,samples_count,expected_lanes,expected_bases_per_sample = \
+      calculate_expected_lanes(\
+        genome_size=3.5,
+        coverage=10,
+        samples_count=96,
+        cluster_size=312500000,
+        is_pe=1,
+        read_length=150,
+        max_samples=96)
+    self.assertTrue(\
+      (output_per_unit==312500000*150*2) & \
+      (round(required_lane_per_sample,3)==0.003) & \
+      (samples_per_lanes==96) & \
+      (samples_count==96) & \
+      (expected_lanes==1) & \
+      (expected_bases_per_sample==3.5*1000000*10))
 
 if __name__ == '__main__':
   unittest.main()

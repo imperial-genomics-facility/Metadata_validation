@@ -28,6 +28,19 @@
         $('#genomeCovSection').hide();
       }
     });
+    {% if choose_assay == 'library_type' %}
+    $('#libraryTypeSection').show();
+    $('#genomeCovSection').hide();
+    $('#customReadsSection').hide();
+    {% elif choose_assay == 'genome_cov' %}
+    $('#libraryTypeSection').hide();
+    $('#genomeCovSection').show();
+    $('#customReadsSection').hide();
+    {% elif choose_assay == 'custom_read' %}
+    $('#libraryTypeSection').hide();
+    $('#genomeCovSection').hide();
+    $('#customReadsSection').show();
+    {% endif %}
   });
 </script>
 <script>
