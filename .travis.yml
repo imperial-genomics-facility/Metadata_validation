@@ -4,10 +4,12 @@ python:
 install:
  - sudo apt-get update
  - pip install -r requirements.txt
+ - cd $HOME
  - git clone https://github.com/imperial-genomics-facility/data-management-python.git
- - cd data-management-python
+ - cd -
+ - cd $HOME/data-management-python
  - git checkout metadata_201908
- - cd ..
+ - cd -
  - export PYTHONPATH="$HOME/data-management-python:$PYTHONPATH"
  - echo $PYTHONPATH
 script:
