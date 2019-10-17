@@ -28,6 +28,26 @@ class Covcalculator_utils1(unittest.TestCase):
       (samples_count==16) & \
       (expected_lanes==1) & \
       (output_per_unit==400000000*300))
+    output_dict = \
+      calculate_expected_lanes_for_known_library(\
+        recommended_clusters=50000,
+        samples_count=6000,
+        cluster_size=400000000,
+        read_length=150,
+        is_sc=1,
+        is_pe=1,
+        max_samples=96)
+    required_lane_per_sample = output_dict.get('required_lane_per_sample')
+    samples_per_lanes = output_dict.get('samples_per_lanes')
+    samples_count = output_dict.get('samples_count')
+    expected_lanes = output_dict.get('expected_lanes')
+    output_per_unit = output_dict.get('output_per_unit')
+    self.assertTrue(\
+      (required_lane_per_sample==0.003) & \
+      (samples_per_lanes==8000) & \
+      (samples_count==6000) & \
+      (expected_lanes==1) & \
+      (output_per_unit==400000000*300))
 
   def test_calculate_expected_samples_for_known_library(self):
     output_dict = \
@@ -49,6 +69,26 @@ class Covcalculator_utils1(unittest.TestCase):
       (samples_per_lanes==16) & \
       (lanes_count==1) & \
       (expected_samples==16) & \
+      (output_per_unit==400000000*300))
+    output_dict = \
+      calculate_expected_samples_for_known_library(\
+        recommended_clusters=50000,
+        lanes_count=1,
+        cluster_size=400000000,
+        read_length=150,
+        is_sc=1,
+        is_pe=1,
+        max_samples=96)
+    required_lane_per_sample = output_dict.get('required_lane_per_sample')
+    samples_per_lanes = output_dict.get('samples_per_lanes')
+    lanes_count = output_dict.get('lanes_count')
+    expected_samples = output_dict.get('expected_samples')
+    output_per_unit = output_dict.get('output_per_unit')
+    self.assertTrue(\
+      (required_lane_per_sample==0.003) & \
+      (samples_per_lanes==8000) & \
+      (lanes_count==1) & \
+      (expected_samples==8000) & \
       (output_per_unit==400000000*300))
 
   def test_calculate_expected_samples(self):
