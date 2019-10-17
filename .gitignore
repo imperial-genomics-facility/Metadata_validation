@@ -105,3 +105,5 @@ venv.bak/
 .project
 .pydevproject
 dev_database.sqlite
+o-rdoc/launchy
+o-ri/launchy
