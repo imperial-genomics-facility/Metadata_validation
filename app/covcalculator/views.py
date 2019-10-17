@@ -119,15 +119,19 @@ def covcalculator_home():
           flash('Ignoring genome size, coverage and expected read counts for known library type')
 
         if choose_sample_or_lane == 'sample_number':
-          required_lane_per_sample,samples_per_lanes,samples_count,expected_lanes,output_per_unit = \
+          output_dict = \
             calculate_expected_lanes_for_known_library(\
               recommended_clusters=recommended_clusters,
               samples_count=samples,
               cluster_size=cluster_size,
               read_length=read_length,
               is_sc=is_sc,
-              max_samples=max_samples
-              )
+              max_samples=max_samples)
+          required_lane_per_sample = output_dict.get('required_lane_per_sample')
+          samples_per_lanes = output_dict.get('samples_per_lanes')
+          samples_count = output_dict.get('samples_count')
+          expected_lanes = output_dict.get('expected_lanes')
+          output_per_unit = output_dict.get('output_per_unit')
           if is_sc==0:
             data_table = \
               [{'Platform name':platform.name,
@@ -166,7 +170,7 @@ def covcalculator_home():
                'Expected lanes']
           flash('Success')
         elif choose_sample_or_lane == 'lane_number':
-          required_lane_per_sample,samples_per_lanes,lanes_count,expected_samples,output_per_unit = \
+          output_dict = \
             calculate_expected_samples_for_known_library(\
               recommended_clusters=recommended_clusters,
               lanes_count=samples,
@@ -174,6 +178,11 @@ def covcalculator_home():
               read_length=read_length,
               is_sc=is_sc,
               max_samples=max_samples)
+          required_lane_per_sample = output_dict.get('required_lane_per_sample')
+          samples_per_lanes = output_dict.get('samples_per_lanes')
+          lanes_count = output_dict.get('lanes_count')
+          expected_samples = output_dict.get('expected_samples')
+          output_per_unit = output_dict.get('output_per_unit')
           if is_sc==0:
             data_table = \
               [{'Platform name':platform.name,
@@ -219,7 +228,7 @@ def covcalculator_home():
           flash('Failed: Missing genome size and coverage')
         else:
           if choose_sample_or_lane == 'sample_number':
-            output_per_unit,required_lane_per_sample,samples_per_lanes,samples_count,expected_lanes,expected_bases_per_sample = \
+            output_dict = \
               calculate_expected_lanes(\
                 genome_size=genome_size,
                 coverage=coverage,
@@ -228,6 +237,12 @@ def covcalculator_home():
                 is_pe=int(is_pe),
                 read_length=int(read_length),
                 max_samples=max_samples)
+            output_per_unit = output_dict.get('output_per_unit')
+            required_lane_per_sample = output_dict.get('required_lane_per_sample')
+            samples_per_lanes = output_dict.get('samples_per_lanes')
+            samples_count = output_dict.get('samples_count')
+            expected_lanes = output_dict.get('expected_lanes')
+            expected_bases_per_sample = output_dict.get('expected_bases_per_sample')
             data_table = \
               [{'Platform name':platform.name,
                 'Genome size (MB)': genome_size,
@@ -245,7 +260,7 @@ def covcalculator_home():
                'Expected lanes']
             flash('Success')
           elif choose_sample_or_lane == 'lane_number':
-            output_per_unit,required_lane_per_sample,samples_per_lanes,lanes_count,expected_samples,expected_bases_per_sample = \
+            output_dict = \
               calculate_expected_samples(\
                 genome_size=genome_size,
                 coverage=coverage,
@@ -254,6 +269,12 @@ def covcalculator_home():
                 read_length=read_length,
                 is_pe=is_pe,
                 max_samples=max_samples)
+            output_per_unit = output_dict.get('output_per_unit')
+            required_lane_per_sample = output_dict.get('required_lane_per_sample')
+            samples_per_lanes = output_dict.get('samples_per_lanes')
+            lanes_count = output_dict.get('lanes_count')
+            expected_samples = output_dict.get('expected_samples')
+            expected_bases_per_sample = output_dict.get('expected_bases_per_sample')
             data_table = \
               [{'Platform name':platform.name,
                 'Genome size (MB)': genome_size,
@@ -281,7 +302,7 @@ def covcalculator_home():
           flash('Failed: Missing required read counts per sample')
         else:
           if choose_sample_or_lane == 'sample_number':
-            required_lane_per_sample,samples_per_lanes,samples_count,expected_lanes,output_per_unit = \
+            output_dict = \
               calculate_expected_lanes_for_known_library(\
                 recommended_clusters=expected_read_count,
                 samples_count=samples,
@@ -289,6 +310,11 @@ def covcalculator_home():
                 read_length=read_length,
                 cluster_size=cluster_size,
                 max_samples=max_samples)
+            required_lane_per_sample = output_dict.get('required_lane_per_sample')
+            samples_per_lanes = output_dict.get('samples_per_lanes')
+            samples_count = output_dict.get('samples_count')
+            expected_lanes = output_dict.get('expected_lanes')
+            output_per_unit = output_dict.get('output_per_unit')
             data_table = \
               [{'Platform name':platform.name,
                 'Requested cluster count per sample':expected_read_count,
