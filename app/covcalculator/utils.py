@@ -40,7 +40,7 @@ def calculate_expected_lanes(genome_size,coverage,samples_count,is_pe,cluster_si
     output_dict.\
       update({\
         'output_per_unit':output_per_unit,
-        'required_lane_per_sample':required_lane_per_sample,
+        'required_lane_per_sample': round(required_lane_per_sample,4),
         'samples_per_lanes':int(samples_per_lanes),
         'samples_count':samples_count,
         'expected_lanes':int(expected_lanes),
@@ -88,7 +88,7 @@ def calculate_expected_samples(genome_size,coverage,lanes_count,is_pe,cluster_si
     output_dict.\
       update({\
         'output_per_unit':output_per_unit,
-        'required_lane_per_sample':required_lane_per_sample,
+        'required_lane_per_sample': round(required_lane_per_sample,4),
         'samples_per_lanes':int(samples_per_lanes),
         'lanes_count':lanes_count,
         'expected_samples':int(expected_samples),
@@ -134,7 +134,7 @@ def calculate_expected_lanes_for_known_library(recommended_clusters,samples_coun
     output_dict = dict()
     output_dict.\
       update({ \
-        'required_lane_per_sample':required_lane_per_sample,
+        'required_lane_per_sample': round(required_lane_per_sample,4),
         'samples_per_lanes':int(samples_per_lanes),
         'samples_count':samples_count,
         'expected_lanes':expected_lanes,
@@ -178,7 +178,7 @@ def calculate_expected_samples_for_known_library(recommended_clusters,lanes_coun
     output_dict = dict()
     output_dict.\
       update({\
-        'required_lane_per_sample':required_lane_per_sample,
+        'required_lane_per_sample': round(required_lane_per_sample,4),
         'samples_per_lanes':int(samples_per_lanes),
         'lanes_count':lanes_count,
         'expected_samples':int(expected_samples),

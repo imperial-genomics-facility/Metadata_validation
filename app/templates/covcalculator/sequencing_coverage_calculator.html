@@ -86,10 +86,14 @@
   {{ form.choose_sample_or_lane }}
   <h6>Sample (cell) or lane counts</h6>
   {{ form.samples }}
-  <h6>Max number of samples per lane</h6>
-  {{ form.max_samples }}
-  <h5>Calculate coverage</h5>
-  {{ form.submit() }}
+  <div>
+    <h6>Max number of samples per lane</h6>
+    {{ form.max_samples }}
+  </div>
+  <div>
+    <h5>Calculate coverage</h5>
+    {{ form.submit() }}
+  </div>
 </form>
 {% if platform != ''%}
   {% if data_table !='' %}
