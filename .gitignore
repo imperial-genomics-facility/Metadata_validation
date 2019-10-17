@@ -105,6 +105,7 @@ venv.bak/
 .project
 .pydevproject
 dev_database.sqlite
+test_database.sqlite
 o-rdoc/launchy
 o-ri/launchy
 o-rdoc/travis

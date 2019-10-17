@@ -1,12 +1,12 @@
 import unittest
 from app import create_app,db
-from app.models import Platform,Assay_type
 
 class IgftoolsApp_test(unittest.TestCase):
   def setUp(self):
     self.app = create_app('testing')
     self.app_context = self.app.app_context()
     self.app_context.push()
+    db.drop_all()
     db.create_all()
     self.client = self.app.test_client(use_cookies=True)
 

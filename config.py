@@ -22,7 +22,7 @@ class DevConfig(Config):
 
 class TestConfig(Config):
   SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URI') or \
-                            'sqlite:////{0}/dev_database.sqlite'.format(BASEDIR)
+                            'sqlite:////{0}/test_database.sqlite'.format(BASEDIR)
 
 
 class ProdConfig(Config):
