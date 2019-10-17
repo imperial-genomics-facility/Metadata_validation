@@ -83,13 +83,16 @@
     {% else %}
       {# show a cookie consent banner #}
       <div id="cookie-consent-container" class="container-fluid bg-dark text-center fixed-bottom">
-        <p class="text-white">By using this website, you are agreeing to allow this website to use cookies.
-        <button class="btn btn-dark text-white" id="cookie-consent">I agree, dismiss this banner</button>
+        <p class="text-white">By using this website, you consent to this website to use cookies.
+        <button class="btn btn-info text-white" id="cookie-consent">I agree, dismiss this banner</button>
       </p>
       </div>
       <script>
         var fn = function () {
-          document.cookie = "cookie_consent=true";
+          var d = new Date();
+          d.setTime(d.getTime() + (30*24*60*60*1000));
+          var expires = "expires="+ d.toUTCString();
+          document.cookie = "cookie_consent=true;"+expires+ ";path=/";
           document.getElementById('cookie-consent-container').hidden = true;
         };
         document.getElementById('cookie-consent').onclick = fn;
