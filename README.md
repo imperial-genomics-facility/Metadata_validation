@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/imperial-genomics-facility/Metadata_validation.svg?branch=v2)](https://travis-ci.org/imperial-genomics-facility/Metadata_validation)
 # Metadata_validation
 A flask based metadata validation server
 
