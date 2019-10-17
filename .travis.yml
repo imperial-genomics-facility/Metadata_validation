@@ -9,5 +9,6 @@ install:
  - git checkout metadata_201908
  - cd ..
  - export PYTHONPATH="$HOME/data-management-python:$PYTHONPATH"
+ - echo $PYTHONPATH
 script:
  - coverage run --source=app setup.py test
