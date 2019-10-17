@@ -2,21 +2,21 @@ language: python
 python:
 - '3.6'
 install:
- - sudo apt-get update
- - pip install -r requirements.txt
- - cd $HOME
- - git clone https://github.com/imperial-genomics-facility/data-management-python.git
- - cd -
- - cd $HOME/data-management-python
- - git checkout metadata_201908
- - cd -
- - export PYTHONPATH="$HOME/data-management-python:$PYTHONPATH"
- - echo $PYTHONPATH
+- sudo apt-get update
+- pip install -r requirements.txt
+- cd $HOME
+- git clone https://github.com/imperial-genomics-facility/data-management-python.git
+- cd -
+- cd $HOME/data-management-python
+- git checkout metadata_201908
+- cd -
+- export PYTHONPATH="$HOME/data-management-python:$PYTHONPATH"
+- echo $PYTHONPATH
 script:
- - coverage run --source=app setup.py test
+- coverage run --source=app setup.py test
 after_success:
 - coverage combine
 - coveralls
 notifications:
   slack:
-    secure: c0YtfTFtGgK2deesuMBBdEURwlXvJwc1UC9JKjMKQ+5mUHwEicIO0T4YlsI7KzHFBue01bE6zn9p7Az9Bp5VFzQUAjCMzJ25ScBJan/RWEuYA/A3uz5WOcFA0Th0bZu6Zu0bGkk9goyYvUNpzA50Dav7bqvrn1k6HOEBaj3GhA949T3WG1tSWCYktphqgyMV1MW0o5j5KFGqK08034Ex2t8l+Om25RANAJwf+6dVLKpJJvrlqbk7O0PgJXiCZmcCyysWHpY9+ZLk5zFAuADBThKt6PycYRX8sDOgTqt29DhpCKXOMfUPwQVN9yaHcQCLFxWJEcoxdNNy65jFGmPg9oMvzA1gHq1bVgBqZ/bN35WUShqL4eBELL7C5rhtednh46bBNeFTz37CtdZRvi21EXK7kuKT/+5bqlt+uUWYt3QoPGykgD42pg9c9XaGnXCI6rZ/F0ACLrxMR8DEKcqxFKIhI+aUieBUruyHmHhRUSkUX4iPtY/tCQriE69/McaToRae0d0p8GSF1UXv9jihzQJJ8DS5S9mlSY5NzMvteDi5yptBeYmKdSIy1/MG24j4MBevzfXO8M+JiIA40rCx/yaoKt9haAvDU9gzOCGSdNdNFsNXsLxY3mPMC5QFcNXdshq6Gv9HZhoRRnZV9l0pIx2mclvvadbszFAOpqKYajE=
+    secure: oJq7Ckf+XEkAH3pZn1SYrEKQmskHpQWT/npx4dkJS3gAgMD0rHs2dgDrvmbpeMBfcCKMZbxR7mN3xHzBjhcRapBDts+ChW1GMr1agCi8zXA5mMh6+7FR2kvj8oLXYmK91mEINxsKDKz64Xa+7B2UnARR4IJ0HreVfQaTLWi6QS1GQHzC62RMKHeDMCK8XMN4b0EHAsBR01DL6nOUn2xOn4wu6p8PfwWBXfQk+tmPhZZNwspP3MjLPOYQZzbiuBzTzShZztu9i/gLTq6m2NDWj2c3IBJHlI9Fc3+01JrwshYH91x7xV8dS2RRDuHmp2F3KYHMxlmPBd4DVDuiwOSKYsDsFVFca89n+O0HuU232Ti++MahUuB0olHZLtWg1hQlduqOlslz7gk7P1nXtHkUzygbQBbo1nD+TG8fpFt829+yYEB7j/RnYLamuoqsq41JE75zD3dUs3tcjc+bkujLEX0O8oVAAfpGY19F5Yhr4hDGVXwC4jgbKC8FXx7wDxXDhlLldS61nMGgjlOUT3L/hrhs2G6GSTklFJgjVU9HTMN4IFzRkSMiRoGXRvjhQcQpExQosQrTmCddtQHMVnZkym3+dMomRT7tHH5ouY0TWYp2xOagYDmGkj8yOKZ8vT75Z19+QXMC76gSxnBFeZzsmLI1X/ut8xLV7w3Bsef8hYA=
