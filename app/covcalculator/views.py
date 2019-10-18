@@ -111,10 +111,27 @@ def covcalculator_home():
       expected_read_count = form.expected_read_count.data
       recommended_clusters = assay_type.read_count
       max_samples = form.max_samples.data
-      col_order = ['Platform name']
       platform_read_length = int(read_length)
       if int(is_pe) > 0:
         platform_read_length *= 2
+      data_table = dict()
+      data_table.\
+        update({
+          'Platform name':platform.name,
+          'Platform cluster count':cluster_size,
+          'Read length': platform_read_length })
+      col_order = [\
+        'Platform cluster count',
+        'Read length']
+      formatted_header_list = [\
+        'Output per unit',
+        'Platform cluster count',
+        'Requested cluster count per sample',
+        'Recommended cluster count per sample',
+        'Cells per lane',
+        'Expected cells',
+        'Requested cluster count per cell',
+        'Recommended cluster count per cell' ]
       if choose_assay == 'library_type':
         if genome_size >0 or \
            coverage > 0 or \
@@ -136,49 +153,43 @@ def covcalculator_home():
           expected_lanes = output_dict.get('expected_lanes')
           output_per_unit = output_dict.get('output_per_unit')
           if is_sc==0:
-            data_table = \
-              [{'Platform name':platform.name,
-                'Platform cluster count':cluster_size,
-                'Read length': platform_read_length,
-                'Output per unit': output_per_unit,
+            data_table.\
+              update({\
                 'Library type': assay_type.assay_name,
+                'Output per unit': output_per_unit,
                 'Recommended cluster count per sample': assay_type.read_count,
                 'Required lane per sample':required_lane_per_sample,
                 'Samples per lane':samples_per_lanes,
                 'Requested samples':samples_count,
-                'Expected lanes':expected_lanes}]
-            col_order = \
-              ['Platform cluster count',
-               'Read length',
+                'Expected lanes':expected_lanes})
+            col_order.\
+              extend([\
                'Output per unit',
                'Library type',
                'Recommended cluster count per sample',
                'Required lane per sample',
                'Samples per lane',
                'Requested samples',
-               'Expected lanes']
+               'Expected lanes'])
           else:
-            data_table = \
-              [{'Platform name':platform.name,
-                'Platform cluster count':cluster_size,
-                'Read length': platform_read_length,
-                'Output per unit': output_per_unit,
+            data_table.\
+              update({\
                 'Library type': assay_type.assay_name,
+                'Output per unit': output_per_unit,
                 'Recommended cluster count per cell': assay_type.read_count,
                 'Required lane per cell':required_lane_per_sample,
                 'Cells per lane':samples_per_lanes,
                 'Requested cells':samples_count,
-                'Expected lanes':expected_lanes}]
-            col_order = \
-              ['Platform cluster count',
-               'Read length',
+                'Expected lanes':expected_lanes})
+            col_order.\
+              extend([\
                'Output per unit',
                'Library type',
                'Recommended cluster count per cell',
                'Required lane per cell',
                'Cells per lane',
                'Requested cells',
-               'Expected lanes']
+               'Expected lanes'])
           flash('Success')
         elif choose_sample_or_lane == 'lane_number':
           output_dict = \
@@ -195,49 +206,43 @@ def covcalculator_home():
           expected_samples = output_dict.get('expected_samples')
           output_per_unit = output_dict.get('output_per_unit')
           if is_sc==0:
-            data_table = \
-              [{'Platform name':platform.name,
-                'Platform cluster count':cluster_size,
-                'Read length': platform_read_length,
-                'Output per unit': output_per_unit,
+            data_table.\
+              update({\
                 'Library type': assay_type.assay_name,
+                'Output per unit': output_per_unit,
                 'Recommended cluster count per sample': assay_type.read_count,
                 'Required lane per sample':required_lane_per_sample,
                 'Samples per lane':samples_per_lanes,
                 'Requested lanes':lanes_count,
-                'Expected samples':expected_samples}]
-            col_order = \
-              ['Platform cluster count',
-               'Read length',
+                'Expected samples':expected_samples})
+            col_order.\
+              extend([\
                'Output per unit',
                'Library type',
                'Recommended cluster count per sample',
                'Required lane per sample',
                'Samples per lane',
                'Requested lanes',
-               'Expected samples']
+               'Expected samples'])
           else:
-            data_table = \
-              [{'Platform name':platform.name,
-                'Platform cluster count':cluster_size,
-                'Read length': platform_read_length,
-                'Output per unit': output_per_unit,
+            data_table.\
+              update({\
                 'Library type': assay_type.assay_name,
+                'Output per unit': output_per_unit,
                 'Recommended cluster count per cell': assay_type.read_count,
                 'Required lane per cell':required_lane_per_sample,
                 'Cells per lane':samples_per_lanes,
                 'Requested lanes':lanes_count,
-                'Expected cells':expected_samples}]
-            col_order = \
-              ['Platform cluster count',
-               'Read length',
+                'Expected cells':expected_samples})
+            col_order.\
+              extend([\
                'Output per unit',
                'Library type',
                'Recommended cluster count per cell',
                'Required lane per cell',
                'Cells per lane',
                'Requested lanes',
-               'Expected cells']
+               'Expected cells'])
           flash('Success')
       elif choose_assay == 'genome_cov':
         if expected_read_count > 0:
@@ -261,26 +266,22 @@ def covcalculator_home():
             samples_per_lanes = output_dict.get('samples_per_lanes')
             samples_count = output_dict.get('samples_count')
             expected_lanes = output_dict.get('expected_lanes')
-            #expected_bases_per_sample = output_dict.get('expected_bases_per_sample')
-            data_table = \
-              [{'Platform name':platform.name,
-                'Platform cluster count':cluster_size,
-                'Read length': platform_read_length,
+            data_table.\
+              update({\
+                'Output per unit': output_per_unit,
                 'Genome size (MB)': genome_size,
-                'Output per unit':output_per_unit,
                 'Required lane per sample':required_lane_per_sample,
                 'Samples per lane':samples_per_lanes,
                 'Requested samples':samples_count,
-                'Expected lanes':expected_lanes}]
-            col_order = \
-              ['Genome size (MB)',
-               'Platform cluster count',
-               'Read length',
+                'Expected lanes':expected_lanes})
+            col_order.\
+              extend([\
                'Output per unit',
+               'Genome size (MB)',
                'Required lane per sample',
                'Samples per lane',
                'Requested samples',
-               'Expected lanes']
+               'Expected lanes'])
             flash('Success')
           elif choose_sample_or_lane == 'lane_number':
             output_dict = \
@@ -297,26 +298,22 @@ def covcalculator_home():
             samples_per_lanes = output_dict.get('samples_per_lanes')
             lanes_count = output_dict.get('lanes_count')
             expected_samples = output_dict.get('expected_samples')
-            #expected_bases_per_sample = output_dict.get('expected_bases_per_sample')
-            data_table = \
-              [{'Platform name':platform.name,
-                'Platform cluster count':cluster_size,
-                'Read length': platform_read_length,
+            data_table.\
+              update({\
+                'Output per unit': output_per_unit,
                 'Genome size (MB)': genome_size,
-                'Output per unit':output_per_unit,
                 'Required lane per sample':required_lane_per_sample,
                 'Samples per lane':samples_per_lanes,
                 'Requested lanes':lanes_count,
-                'Expected samples':expected_samples}]
-            col_order = \
-              ['Genome size (MB)',
-               'Platform cluster count',
-               'Read length',
+                'Expected samples':expected_samples})
+            col_order.\
+              extend([\
                'Output per unit',
+               'Genome size (MB)',
                'Required lane per sample',
                'Samples per lane',
                'Requested lanes',
-               'Expected samples']
+               'Expected samples'])
             flash('Success')
       elif choose_assay == 'custom_read':
         if genome_size > 0 or \
@@ -342,25 +339,22 @@ def covcalculator_home():
             samples_count = output_dict.get('samples_count')
             expected_lanes = output_dict.get('expected_lanes')
             output_per_unit = output_dict.get('output_per_unit')
-            data_table = \
-              [{'Platform name':platform.name,
-                'Platform cluster count':cluster_size,
-                'Read length': platform_read_length,
-                'Output per unit':output_per_unit,
+            data_table.\
+              update({\
+                'Output per unit': output_per_unit,
                 'Requested cluster count per sample':expected_read_count,
                 'Required lane per sample':required_lane_per_sample,
                 'Samples per lane':samples_per_lanes,
                 'Requested samples':samples_count,
-                'Expected lanes':expected_lanes}]
-            col_order = \
-              ['Platform cluster count',
-               'Read length',
+                'Expected lanes':expected_lanes})
+            col_order.\
+              extend([\
                'Output per unit',
                'Requested cluster count per sample',
                'Required lane per sample',
                'Samples per lane',
                'Requested samples',
-               'Expected lanes']
+               'Expected lanes'])
             flash('Success')
           else:
             flash('Failed: Select output mode as sample, for custom read count per sample')
@@ -371,15 +365,7 @@ def covcalculator_home():
              'covcalculator/sequencing_coverage_calculator.html',
              form=form)
 
-    formatted_header_list = \
-      ['Output per unit',
-       'Platform cluster count',
-       'Requested cluster count per sample',
-       'Recommended cluster count per sample',
-       'Cells per lane',
-       'Expected cells',
-       'Requested cluster count per cell',
-       'Recommended cluster count per cell']
+    data_table = [data_table]
     if data_table !='' and isinstance(data_table,list):
       data_table = pd.DataFrame(data_table).set_index('Platform name')
       for header in formatted_header_list:
@@ -394,20 +380,20 @@ def covcalculator_home():
           border=0,
           justify='left')
     return render_template(\
-             'covcalculator/sequencing_coverage_calculator.html',
-             form=form,
-             platform=platform,
-             output_per_unit=output_per_unit,
-             required_lane_per_sample=required_lane_per_sample,
-             samples_per_lanes=samples_per_lanes,
-             samples_count=samples,
-             lanes_count=samples,
-             expected_lanes=expected_lanes,
-             expected_samples=expected_samples,
-             coverage=coverage,
-             genome_size=genome_size,
-             choose_assay=choose_assay,
-             data_table=data_table,
-             choose_sample_or_lane=choose_sample_or_lane)
+      'covcalculator/sequencing_coverage_calculator.html',
+      form=form,
+      platform=platform,
+      output_per_unit=output_per_unit,
+      required_lane_per_sample=required_lane_per_sample,
+      samples_per_lanes=samples_per_lanes,
+      samples_count=samples,
+      lanes_count=samples,
+      expected_lanes=expected_lanes,
+      expected_samples=expected_samples,
+      coverage=coverage,
+      genome_size=genome_size,
+      choose_assay=choose_assay,
+      data_table=data_table,
+      choose_sample_or_lane=choose_sample_or_lane)
   except Exception as e:
     logging.warning('Failed to claculate coverage, error: {0}'.format(e))
