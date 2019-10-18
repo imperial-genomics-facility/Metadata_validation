@@ -112,6 +112,9 @@ def covcalculator_home():
       recommended_clusters = assay_type.read_count
       max_samples = form.max_samples.data
       col_order = ['Platform name']
+      platform_read_length = int(read_length)
+      if int(is_pe) > 0:
+        platform_read_length *= 2
       if choose_assay == 'library_type':
         if genome_size >0 or \
            coverage > 0 or \
@@ -136,6 +139,8 @@ def covcalculator_home():
             data_table = \
               [{'Platform name':platform.name,
                 'Platform cluster count':cluster_size,
+                'Read length': platform_read_length,
+                'Output per unit': output_per_unit,
                 'Library type': assay_type.assay_name,
                 'Recommended cluster count per sample': assay_type.read_count,
                 'Required lane per sample':required_lane_per_sample,
@@ -144,6 +149,8 @@ def covcalculator_home():
                 'Expected lanes':expected_lanes}]
             col_order = \
               ['Platform cluster count',
+               'Read length',
+               'Output per unit',
                'Library type',
                'Recommended cluster count per sample',
                'Required lane per sample',
@@ -154,6 +161,8 @@ def covcalculator_home():
             data_table = \
               [{'Platform name':platform.name,
                 'Platform cluster count':cluster_size,
+                'Read length': platform_read_length,
+                'Output per unit': output_per_unit,
                 'Library type': assay_type.assay_name,
                 'Recommended cluster count per cell': assay_type.read_count,
                 'Required lane per cell':required_lane_per_sample,
@@ -162,6 +171,8 @@ def covcalculator_home():
                 'Expected lanes':expected_lanes}]
             col_order = \
               ['Platform cluster count',
+               'Read length',
+               'Output per unit',
                'Library type',
                'Recommended cluster count per cell',
                'Required lane per cell',
@@ -187,6 +198,8 @@ def covcalculator_home():
             data_table = \
               [{'Platform name':platform.name,
                 'Platform cluster count':cluster_size,
+                'Read length': platform_read_length,
+                'Output per unit': output_per_unit,
                 'Library type': assay_type.assay_name,
                 'Recommended cluster count per sample': assay_type.read_count,
                 'Required lane per sample':required_lane_per_sample,
@@ -195,6 +208,8 @@ def covcalculator_home():
                 'Expected samples':expected_samples}]
             col_order = \
               ['Platform cluster count',
+               'Read length',
+               'Output per unit',
                'Library type',
                'Recommended cluster count per sample',
                'Required lane per sample',
@@ -205,6 +220,8 @@ def covcalculator_home():
             data_table = \
               [{'Platform name':platform.name,
                 'Platform cluster count':cluster_size,
+                'Read length': platform_read_length,
+                'Output per unit': output_per_unit,
                 'Library type': assay_type.assay_name,
                 'Recommended cluster count per cell': assay_type.read_count,
                 'Required lane per cell':required_lane_per_sample,
@@ -213,6 +230,8 @@ def covcalculator_home():
                 'Expected cells':expected_samples}]
             col_order = \
               ['Platform cluster count',
+               'Read length',
+               'Output per unit',
                'Library type',
                'Recommended cluster count per cell',
                'Required lane per cell',
@@ -242,9 +261,11 @@ def covcalculator_home():
             samples_per_lanes = output_dict.get('samples_per_lanes')
             samples_count = output_dict.get('samples_count')
             expected_lanes = output_dict.get('expected_lanes')
-            expected_bases_per_sample = output_dict.get('expected_bases_per_sample')
+            #expected_bases_per_sample = output_dict.get('expected_bases_per_sample')
             data_table = \
               [{'Platform name':platform.name,
+                'Platform cluster count':cluster_size,
+                'Read length': platform_read_length,
                 'Genome size (MB)': genome_size,
                 'Output per unit':output_per_unit,
                 'Required lane per sample':required_lane_per_sample,
@@ -253,6 +274,8 @@ def covcalculator_home():
                 'Expected lanes':expected_lanes}]
             col_order = \
               ['Genome size (MB)',
+               'Platform cluster count',
+               'Read length',
                'Output per unit',
                'Required lane per sample',
                'Samples per lane',
@@ -274,9 +297,11 @@ def covcalculator_home():
             samples_per_lanes = output_dict.get('samples_per_lanes')
             lanes_count = output_dict.get('lanes_count')
             expected_samples = output_dict.get('expected_samples')
-            expected_bases_per_sample = output_dict.get('expected_bases_per_sample')
+            #expected_bases_per_sample = output_dict.get('expected_bases_per_sample')
             data_table = \
               [{'Platform name':platform.name,
+                'Platform cluster count':cluster_size,
+                'Read length': platform_read_length,
                 'Genome size (MB)': genome_size,
                 'Output per unit':output_per_unit,
                 'Required lane per sample':required_lane_per_sample,
@@ -285,6 +310,8 @@ def covcalculator_home():
                 'Expected samples':expected_samples}]
             col_order = \
               ['Genome size (MB)',
+               'Platform cluster count',
+               'Read length',
                'Output per unit',
                'Required lane per sample',
                'Samples per lane',
@@ -317,13 +344,19 @@ def covcalculator_home():
             output_per_unit = output_dict.get('output_per_unit')
             data_table = \
               [{'Platform name':platform.name,
+                'Platform cluster count':cluster_size,
+                'Read length': platform_read_length,
+                'Output per unit':output_per_unit,
                 'Requested cluster count per sample':expected_read_count,
                 'Required lane per sample':required_lane_per_sample,
                 'Samples per lane':samples_per_lanes,
                 'Requested samples':samples_count,
                 'Expected lanes':expected_lanes}]
             col_order = \
-              ['Requested cluster count per sample',
+              ['Platform cluster count',
+               'Read length',
+               'Output per unit',
+               'Requested cluster count per sample',
                'Required lane per sample',
                'Samples per lane',
                'Requested samples',
