@@ -35,6 +35,17 @@ class CovcalculatorView_test(unittest.TestCase):
        [Platform(**platform_data) 
           for platform_data in platform_data_list]
     db.session.add_all(platform_lists)
+    assay_data_list = [\
+      {'assay_name':'mRNA-Seq DE profiling',
+       'read_count':25000000,
+       'is_sc':0},
+      {'assay_name':'TenX genomics 3\' RNA-seq',
+       'read_count':50000,
+       'is_sc':1}]
+    assay_lists =\
+       [Assay_type(**assay_data) 
+          for assay_data in assay_data_list]
+    db.session.add_all(assay_lists)
     db.session.commit()
 
   def tearDown(self):
@@ -43,6 +54,10 @@ class CovcalculatorView_test(unittest.TestCase):
     self.app_context.pop()
   
   def test1(self):
-    print([i.name for i in Platform.query.all()])
+    self.assertTrue('HiSeq 4000 150 PE' in [i.name for i in Platform.query.all()])
+  
+  def test2(self):
+    self.assertTrue('mRNA-Seq DE profiling' in [i.assay_name for i in Assay_type.query.all()])
+
 if __name__ == '__main__':
   unittest.main()

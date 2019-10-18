@@ -96,6 +96,7 @@ def covcalculator_home():
     is_sc = 0
     max_samples = 0
     form = SeqrunForm()
+    col_order = ['Platform name']
     if form.validate_on_submit():
       platform = form.platform.data
       genome_size = form.genome_size.data
@@ -365,8 +366,8 @@ def covcalculator_home():
              'covcalculator/sequencing_coverage_calculator.html',
              form=form)
 
-    data_table = [data_table]
-    if data_table !='' and isinstance(data_table,list):
+    if data_table !='' and isinstance(data_table,dict):
+      data_table = [data_table]
       data_table = pd.DataFrame(data_table).set_index('Platform name')
       for header in formatted_header_list:
         if header in data_table.columns:
