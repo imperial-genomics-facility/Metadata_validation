@@ -87,12 +87,15 @@
   <h6>Sample (cell) or lane counts</h6>
   {{ form.samples }}
   <div>
-    <h6>Max number of samples per lane</h6>
+    <p><h6>Max number of samples limit per lane</h6>
     {{ form.max_samples }}
+  </p>
   </div>
   <div>
+    <p>
     <h5>Calculate coverage</h5>
     {{ form.submit() }}
+    </p>
   </div>
 </form>
 {% if platform != ''%}
