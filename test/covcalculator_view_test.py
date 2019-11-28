@@ -5,11 +5,13 @@ from app.models import Platform,Assay_type
 class CovcalculatorView_test(unittest.TestCase):
   def setUp(self):
     self.app = create_app('testing')
+    self.app.config['TESTING'] = True
+    self.app.config['WTF_CSRF_ENABLED'] = False
     self.app_context = self.app.app_context()
     self.app_context.push()
     db.drop_all()
     db.create_all()
-    self.client = self.app.test_client(use_cookies=True)
+    self.client = self.app.test_client(use_cookies=False)
     platform_data_list = [\
       {'name':'HiSeq 4000 50 SR',
        'm_reads':270,
@@ -58,6 +60,30 @@ class CovcalculatorView_test(unittest.TestCase):
   
   def test2(self):
     self.assertTrue('mRNA-Seq DE profiling' in [i.assay_name for i in Assay_type.query.all()])
+
+  def test_get_page(self):
+    covcalculator_response = self.client.get('/covcalculator/')
+    self.assertEqual(covcalculator_response.status_code,200)
+    print(covcalculator_response.get_data(as_text=True))
+
+  def test_post_page(self):
+    platform = [i for i in Platform.query.all() if i.name == 'HiSeq 4000 150 PE'][0]
+    assay = [i for i in Assay_type.query.all() if i.assay_name == 'mRNA-Seq DE profiling'][0]
+    print('UT', platform)
+    print('UT', assay)
+    covcalculator_response = \
+      self.client.post(\
+        '/covcalculator/',
+        data=dict(
+          platform=platform,
+          choose_assay='Use recommended clusters for known library type',
+          assay_type=assay,
+          choose_sample_or_lane='I will sequence following lanes',
+          samples=1,
+          max_samples=96
+        ),
+        follow_redirects=True)
+    #print(covcalculator_response.get_data(as_text=True))
 
 if __name__ == '__main__':
   unittest.main()

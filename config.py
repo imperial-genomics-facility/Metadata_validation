@@ -21,6 +21,7 @@ class DevConfig(Config):
                             'sqlite:////{0}/dev_database.sqlite'.format(BASEDIR)
 
 class TestConfig(Config):
+  WTF_CSRF_ENABLED = False
   SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URI') or \
                             'sqlite:////{0}/test_database.sqlite'.format(BASEDIR)
 
