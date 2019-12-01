@@ -64,7 +64,7 @@ class CovcalculatorView_test(unittest.TestCase):
   def test_get_page(self):
     covcalculator_response = self.client.get('/covcalculator/')
     self.assertEqual(covcalculator_response.status_code,200)
-    print(covcalculator_response.get_data(as_text=True))
+    #print(covcalculator_response.get_data(as_text=True))
 
   def test_post_page(self):
     platform = [i for i in Platform.query.all() if i.name == 'HiSeq 4000 150 PE'][0]
