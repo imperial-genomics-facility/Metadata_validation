@@ -1,6 +1,7 @@
 import unittest
 from app import create_app,db
 from app.models import Platform,Assay_type
+from app.covcalculator.forms import SeqrunForm
 
 class CovcalculatorView_test(unittest.TestCase):
   def setUp(self):
@@ -66,24 +67,71 @@ class CovcalculatorView_test(unittest.TestCase):
     self.assertEqual(covcalculator_response.status_code,200)
     #print(covcalculator_response.get_data(as_text=True))
 
+  def test_form(self):
+    platform = Platform.query.filter_by(id=1).all()
+    assay = Assay_type.query.filter_by(id=1).all()
+    form = \
+      SeqrunForm(\
+        platform=platform[0],
+        choose_assay='library_type',
+        assay_type=assay[0],
+        genome_size=3200,
+        coverage=10,
+        expected_read_count=2000000,
+        choose_sample_or_lane='lane_number',
+        samples=1,
+        max_samples=96)
+    self.assertTrue(form.validate())
+    form = \
+      SeqrunForm(\
+        platform=platform[0],
+        choose_assay='library_type',
+        assay_type=assay[0],
+        genome_size=-1,
+        coverage=10,
+        expected_read_count=2000000,
+        choose_sample_or_lane='lane_number',
+        samples=1,
+        max_samples=96)
+    self.assertFalse(form.validate())
+    form = \
+      SeqrunForm(\
+        platform=platform[0],
+        choose_assay=None,
+        assay_type=assay[0],
+        genome_size=100,
+        coverage=10,
+        expected_read_count=2000000,
+        choose_sample_or_lane='lane_number',
+        samples=1,
+        max_samples=96)
+    self.assertFalse(form.validate())
+
   def test_post_page(self):
-    platform = [i for i in Platform.query.all() if i.name == 'HiSeq 4000 150 PE'][0]
-    assay = [i for i in Assay_type.query.all() if i.assay_name == 'mRNA-Seq DE profiling'][0]
+    #platform = [i for i in Platform.query.all() if i.name == 'HiSeq 4000 150 PE'][0]
+    #assay = [i for i in Assay_type.query.all() if i.assay_name == 'mRNA-Seq DE profiling'][0]
+    platform = Platform.query.filter_by(id=1).all()
+    assay = Assay_type.query.filter_by(id=1).all()
     print('UT', platform)
     print('UT', assay)
     covcalculator_response = \
       self.client.post(\
         '/covcalculator/',
         data=dict(
-          platform=platform,
-          choose_assay='Use recommended clusters for known library type',
-          assay_type=assay,
-          choose_sample_or_lane='I will sequence following lanes',
+          platform=platform[0],
+          choose_assay='library_type',
+          assay_type=assay[0],
+          genome_size=3200,
+          coverage=10,
+          expected_read_count=2000000,
+          choose_sample_or_lane='lane_number',
           samples=1,
-          max_samples=96
+          max_samples=96,
+          submit=True
         ),
         follow_redirects=True)
     #print(covcalculator_response.get_data(as_text=True))
+
 
 if __name__ == '__main__':
   unittest.main()
