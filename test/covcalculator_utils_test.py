@@ -186,19 +186,114 @@ class Covcalculator_utils1(unittest.TestCase):
   def test_calculate_coverage_output(self):
     data_table,col_order,formatted_header = \
       calculate_coverage_output(
-        platform_name,
-        cluster_size,
-        platform_read_length,
-        choose_assay,
-        choose_sample_or_lane,
-        recommended_clusters,
-        samples,is_sc,
-        max_samples,
-        assay_type_assay_name,
-        expected_read_count,
-        genome_size,
-        coverage,
-        is_pe
+        platform_name='HiSeq 4000 50 SR',
+        cluster_size=312500000,
+        platform_read_length=50,
+        choose_assay='library_type',
+        choose_sample_or_lane='lane_number',
+        recommended_clusters=2220000,
+        samples=1,
+        is_sc=0,
+        max_samples=96,
+        assay_type_assay_name='Small RNA DE profiling',
+        expected_read_count=0,
+        genome_size=0,
+        coverage=0,
+        is_pe=0
       )
+    self.assertEqual(data_table.get('Expected samples'),96)
+    self.assertTrue('Output per unit' in col_order)
+    self.assertTrue('Output per unit' in formatted_header)
+    data_table,col_order,formatted_header = \
+      calculate_coverage_output(
+        platform_name='HiSeq 4000 50 SR',
+        cluster_size=312500000,
+        platform_read_length=50,
+        choose_assay='genome_cov',
+        choose_sample_or_lane='lane_number',
+        recommended_clusters=2220000,
+        samples=1,
+        is_sc=0,
+        max_samples=96,
+        assay_type_assay_name='Small RNA DE profiling',
+        expected_read_count=0,
+        genome_size=0,
+        coverage=0,
+        is_pe=0
+      )
+    self.assertEqual(len(data_table),0)
+    data_table,col_order,formatted_header = \
+      calculate_coverage_output(
+        platform_name='HiSeq 4000 50 SR',
+        cluster_size=312500000,
+        platform_read_length=50,
+        choose_assay='custom_read',
+        choose_sample_or_lane='lane_number',
+        recommended_clusters=2220000,
+        samples=1,
+        is_sc=0,
+        max_samples=96,
+        assay_type_assay_name='Small RNA DE profiling',
+        expected_read_count=0,
+        genome_size=0,
+        coverage=0,
+        is_pe=0
+      )
+    self.assertEqual(len(data_table),0)
+    data_table,col_order,formatted_header = \
+      calculate_coverage_output(
+        platform_name='HiSeq 4000 50 SR',
+        cluster_size=312500000,
+        platform_read_length=50,
+        choose_assay='library_type',
+        choose_sample_or_lane='lane_number',
+        recommended_clusters=0,
+        samples=1,
+        is_sc=0,
+        max_samples=96,
+        assay_type_assay_name='Small RNA DE profiling',
+        expected_read_count=10000000,
+        genome_size=3200,
+        coverage=10,
+        is_pe=0
+      )
+    self.assertEqual(len(data_table),0)
+    data_table,col_order,formatted_header = \
+      calculate_coverage_output(
+        platform_name='HiSeq 4000 150 PE',
+        cluster_size=312500000,
+        platform_read_length=150,
+        choose_assay='library_type',
+        choose_sample_or_lane='sample_number',
+        recommended_clusters=25000000,
+        samples=100,
+        is_sc=0,
+        max_samples=96,
+        assay_type_assay_name='mRNA-Seq DE profiling',
+        expected_read_count=10000000,
+        genome_size=3200,
+        coverage=10,
+        is_pe=1
+    )
+    self.assertEqual(data_table.get('Expected lanes'),9)
+    data_table,col_order,formatted_header = \
+      calculate_coverage_output(
+        platform_name='HiSeq 4000 150 PE',
+        cluster_size=312500000,
+        platform_read_length=150,
+        choose_assay='library_type',
+        choose_sample_or_lane='sample_number',
+        recommended_clusters=50000,
+        samples=5000,
+        is_sc=1,
+        max_samples=96,
+        assay_type_assay_name="TenX genomics 3' RNA-seq",
+        expected_read_count=10000000,
+        genome_size=3200,
+        coverage=10,
+        is_pe=1
+    )
+    self.assertEqual(data_table.get('Expected lanes'),1)
+    self.assertEqual(data_table.get('Cells per lane'),6250)
 if __name__ == '__main__':
   unittest.main()
