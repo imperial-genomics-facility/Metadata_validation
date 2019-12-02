@@ -187,3 +187,252 @@ def calculate_expected_samples_for_known_library(recommended_clusters,lanes_coun
     return output_dict
   except Exception as e:
     raise ValueError('Failed to calculate expected samples for know library, error: {0}'.format(e))
+
+def calculate_coverage_output(platform_name,cluster_size,platform_read_length,choose_assay,choose_sample_or_lane,
+                              recommended_clusters,samples,is_sc,max_samples,assay_type_assay_name,expected_read_count,
+                              genome_size,coverage,is_pe):
+  '''
+  A function for formatting coverage output
+
+  :param platform_name: A string containing the platform name
+  :param cluster_size: A long int value of the platform cluster size
+  :param platform_read_length: A int value for the target read lengthe of the platform
+  :param choose_assay: A string containing the toggle for assay name
+  :param choose_sample_or_lane: A string containing the toggle for sample or lane count
+  :param recommended_clusters: A int value for recommended clusters for known assay types
+  :param samples: An int value for target number of samples or lanes
+  :param is_sc: A toggle for single cell assay types
+  :param max_samples: An int value for the max samples per lane
+  :param assay_type_assay_name: A string for assay name
+  :param expected_read_count: An long int for custom read counts
+  :param genome_size: An int value for genome size in Mb
+  :param coverage: An int value for target genome coverage
+  :param is_pe: A toggle for paired end library type
+  :returns: A dictionary containing data, list containing the output column order and a list containing the formatted headers
+  '''
+  try:
+    data_table = dict()
+    data_table.\
+        update({
+          'Platform name':platform_name,
+          'Platform cluster count':cluster_size,
+          'Read length': platform_read_length })
+    col_order = [\
+        'Platform cluster count',
+        'Read length']
+    formatted_header_list = [\
+        'Output per unit',
+        'Platform cluster count',
+        'Requested cluster count per sample',
+        'Recommended cluster count per sample',
+        'Cells per lane',
+        'Expected cells',
+        'Requested cluster count per cell',
+        'Recommended cluster count per cell' ]
+    ################################################
+    if choose_assay == 'library_type':
+      if choose_sample_or_lane == 'sample_number':
+        output_dict = \
+          calculate_expected_lanes_for_known_library(\
+            recommended_clusters=recommended_clusters,
+            samples_count=samples,
+            cluster_size=cluster_size,
+            read_length=platform_read_length,
+            is_sc=is_sc,
+            max_samples=max_samples)
+        required_lane_per_sample = output_dict.get('required_lane_per_sample')
+        samples_per_lanes = output_dict.get('samples_per_lanes')
+        samples_count = output_dict.get('samples_count')
+        expected_lanes = output_dict.get('expected_lanes')
+        output_per_unit = output_dict.get('output_per_unit')
+        if is_sc==0:
+          data_table.\
+            update({\
+              'Library type': assay_type_assay_name,
+              'Output per unit': output_per_unit,
+              'Recommended cluster count per sample': recommended_clusters,
+              'Required lane per sample':required_lane_per_sample,
+              'Samples per lane':samples_per_lanes,
+              'Requested samples':samples_count,
+              'Expected lanes':expected_lanes})
+          col_order.\
+            extend([\
+             'Output per unit',
+             'Library type',
+             'Recommended cluster count per sample',
+             'Required lane per sample',
+             'Samples per lane',
+             'Requested samples',
+             'Expected lanes'])
+        else:
+          data_table.\
+            update({\
+              'Library type': assay_type_assay_name,
+              'Output per unit': output_per_unit,
+              'Recommended cluster count per cell': recommended_clusters,
+              'Required lane per cell':required_lane_per_sample,
+              'Cells per lane':samples_per_lanes,
+              'Requested cells':samples_count,
+              'Expected lanes':expected_lanes})
+          col_order.\
+            extend([\
+             'Output per unit',
+             'Library type',
+             'Recommended cluster count per cell',
+             'Required lane per cell',
+             'Cells per lane',
+             'Requested cells',
+             'Expected lanes'])
+      elif choose_sample_or_lane == 'lane_number':
+        output_dict = \
+          calculate_expected_samples_for_known_library(\
+            recommended_clusters=recommended_clusters,
+            lanes_count=samples,
+            cluster_size=cluster_size,
+            read_length=platform_read_length,
+            is_sc=is_sc,
+            max_samples=max_samples)
+        required_lane_per_sample = output_dict.get('required_lane_per_sample')
+        samples_per_lanes = output_dict.get('samples_per_lanes')
+        lanes_count = output_dict.get('lanes_count')
+        expected_samples = output_dict.get('expected_samples')
+        output_per_unit = output_dict.get('output_per_unit')
+        if is_sc==0:
+          data_table.\
+            update({\
+              'Library type': assay_type_assay_name,
+              'Output per unit': output_per_unit,
+              'Recommended cluster count per sample': recommended_clusters,
+              'Required lane per sample':required_lane_per_sample,
+              'Samples per lane':samples_per_lanes,
+              'Requested lanes':lanes_count,
+              'Expected samples':expected_samples})
+          col_order.\
+            extend([\
+             'Output per unit',
+             'Library type',
+             'Recommended cluster count per sample',
+             'Required lane per sample',
+             'Samples per lane',
+             'Requested lanes',
+             'Expected samples'])
+        else:
+          data_table.\
+            update({\
+              'Library type': assay_type_assay_name,
+              'Output per unit': output_per_unit,
+              'Recommended cluster count per cell': recommended_clusters,
+              'Required lane per cell':required_lane_per_sample,
+              'Cells per lane':samples_per_lanes,
+              'Requested lanes':lanes_count,
+              'Expected cells':expected_samples})
+          col_order.\
+            extend([\
+             'Output per unit',
+             'Library type',
+             'Recommended cluster count per cell',
+             'Required lane per cell',
+             'Cells per lane',
+             'Requested lanes',
+             'Expected cells'])
+    elif choose_assay == 'genome_cov':
+      if genome_size > 0 and coverage > 0:
+        if choose_sample_or_lane == 'sample_number':
+          output_dict = \
+            calculate_expected_lanes(\
+              genome_size=genome_size,
+              coverage=coverage,
+              samples_count=int(samples),
+              cluster_size=int(cluster_size),
+              is_pe=int(is_pe),
+              read_length=int(platform_read_length),
+              max_samples=max_samples)
+          output_per_unit = output_dict.get('output_per_unit')
+          required_lane_per_sample = output_dict.get('required_lane_per_sample')
+          samples_per_lanes = output_dict.get('samples_per_lanes')
+          samples_count = output_dict.get('samples_count')
+          expected_lanes = output_dict.get('expected_lanes')
+          data_table.\
+            update({\
+              'Output per unit': output_per_unit,
+              'Genome size (MB)': genome_size,
+              'Required lane per sample':required_lane_per_sample,
+              'Samples per lane':samples_per_lanes,
+              'Requested samples':samples_count,
+              'Expected lanes':expected_lanes})
+          col_order.\
+            extend([\
+             'Output per unit',
+             'Genome size (MB)',
+             'Required lane per sample',
+             'Samples per lane',
+             'Requested samples',
+             'Expected lanes'])
+        elif choose_sample_or_lane == 'lane_number':
+          output_dict = \
+            calculate_expected_samples(\
+              genome_size=genome_size,
+              coverage=coverage,
+              lanes_count=samples,
+              cluster_size=cluster_size,
+              read_length=platform_read_length,
+              is_pe=is_pe,
+              max_samples=max_samples)
+          output_per_unit = output_dict.get('output_per_unit')
+          required_lane_per_sample = output_dict.get('required_lane_per_sample')
+          samples_per_lanes = output_dict.get('samples_per_lanes')
+          lanes_count = output_dict.get('lanes_count')
+          expected_samples = output_dict.get('expected_samples')
+          data_table.\
+            update({\
+              'Output per unit': output_per_unit,
+              'Genome size (MB)': genome_size,
+              'Required lane per sample':required_lane_per_sample,
+              'Samples per lane':samples_per_lanes,
+              'Requested lanes':lanes_count,
+              'Expected samples':expected_samples})
+          col_order.\
+            extend([\
+             'Output per unit',
+             'Genome size (MB)',
+             'Required lane per sample',
+             'Samples per lane',
+             'Requested lanes',
+             'Expected samples'])
+    elif choose_assay == 'custom_read':
+      if (expected_read_count is not None or \
+         expected_read_count != '') and \
+         expected_read_count > 0:
+        if choose_sample_or_lane == 'sample_number':
+          output_dict = \
+            calculate_expected_lanes_for_known_library(\
+              recommended_clusters=expected_read_count,
+              samples_count=samples,
+              is_sc=0,
+              read_length=platform_read_length,
+              cluster_size=cluster_size,
+              max_samples=max_samples)
+          required_lane_per_sample = output_dict.get('required_lane_per_sample')
+          samples_per_lanes = output_dict.get('samples_per_lanes')
+          samples_count = output_dict.get('samples_count')
+          expected_lanes = output_dict.get('expected_lanes')
+          output_per_unit = output_dict.get('output_per_unit')
+          data_table.\
+            update({\
+              'Output per unit': output_per_unit,
+              'Requested cluster count per sample':expected_read_count,
+              'Required lane per sample':required_lane_per_sample,
+              'Samples per lane':samples_per_lanes,
+              'Requested samples':samples_count,
+              'Expected lanes':expected_lanes})
+          col_order.\
+            extend([\
+             'Output per unit',
+             'Requested cluster count per sample',
+             'Required lane per sample',
+             'Samples per lane',
+             'Requested samples',
+             'Expected lanes'])
+    return data_table,col_order,formatted_header_list
+  except Exception as e:
+    raise ValueError(e)

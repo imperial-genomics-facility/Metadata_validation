@@ -1,5 +1,5 @@
 import unittest
-from app.covcalculator.utils import calculate_expected_lanes,calculate_expected_samples
+from app.covcalculator.utils import calculate_expected_lanes,calculate_expected_samples,calculate_coverage_output
 from app.covcalculator.utils import calculate_expected_lanes_for_known_library,calculate_expected_samples_for_known_library
 
 class Covcalculator_utils1(unittest.TestCase):
@@ -183,5 +183,22 @@ class Covcalculator_utils1(unittest.TestCase):
       (expected_lanes==1) & \
       (expected_bases_per_sample==3.5*1000000*10))
 
+  def test_calculate_coverage_output(self):
+    data_table,col_order,formatted_header = \
+      calculate_coverage_output(
+        platform_name,
+        cluster_size,
+        platform_read_length,
+        choose_assay,
+        choose_sample_or_lane,
+        recommended_clusters,
+        samples,is_sc,
+        max_samples,
+        assay_type_assay_name,
+        expected_read_count,
+        genome_size,
+        coverage,
+        is_pe
+      )
 if __name__ == '__main__':
   unittest.main()
