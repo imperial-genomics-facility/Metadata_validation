@@ -110,7 +110,7 @@ class Covcalculator_utils1(unittest.TestCase):
     self.assertTrue(\
       (output_per_unit==312500000*150*2) & \
       (round(required_lane_per_sample,2)==0.34) & \
-      (samples_per_lanes==2) & \
+      (int(samples_per_lanes)==2) & \
       (lanes_count==2) & \
       (expected_samples==5) & \
       (expected_bases_per_sample==3200*1000000*10))
@@ -156,7 +156,7 @@ class Covcalculator_utils1(unittest.TestCase):
     self.assertTrue(\
       (output_per_unit==312500000*150*2) & \
       (round(required_lane_per_sample,2)==0.34) & \
-      (samples_per_lanes==2) & \
+      (round(samples_per_lanes,1)==2.9) & \
       (samples_count==10) & \
       (expected_lanes==4) & \
       (expected_bases_per_sample==3200*1000000*10))
@@ -182,6 +182,17 @@ class Covcalculator_utils1(unittest.TestCase):
       (samples_count==96) & \
       (expected_lanes==1) & \
       (expected_bases_per_sample==3.5*1000000*10))
+    output_dict = \
+      calculate_expected_lanes(\
+        genome_size=3200,
+        coverage=10,
+        samples_count=1,
+        cluster_size=25000000,
+        is_pe=1,
+        read_length=300,
+        max_samples=96)
+    expected_lanes = output_dict.get('expected_lanes')
+    self.assertEqual(expected_lanes,3)
 
   def test_calculate_coverage_output(self):
     data_table,col_order,formatted_header = \
@@ -295,5 +306,23 @@ class Covcalculator_utils1(unittest.TestCase):
     )
     self.assertEqual(data_table.get('Expected lanes'),1)
     self.assertEqual(data_table.get('Cells per lane'),6250)
+    data_table,col_order,formatted_header = \
+      calculate_coverage_output(
+        platform_name='Miseq v3 300 PE',
+        cluster_size=25000000,
+        platform_read_length=300,
+        choose_assay='genome_cov',
+        choose_sample_or_lane='sample_number',
+        recommended_clusters=0,
+        samples=1,
+        is_sc=0,
+        max_samples=96,
+        assay_type_assay_name="",
+        expected_read_count=0,
+        genome_size=3200,
+        coverage=10,
+        is_pe=1)
+    self.assertEqual(data_table.get('Expected lanes'),3)
+
 if __name__ == '__main__':
   unittest.main()

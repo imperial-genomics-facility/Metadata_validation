@@ -31,8 +31,8 @@ def calculate_expected_lanes(genome_size,coverage,samples_count,is_pe,cluster_si
       required_lane_per_sample = min_required_lane_per_sample
     if samples_per_lanes > max_samples:
         samples_per_lanes = max_samples
-    if int(samples_per_lanes) < 1:
-        samples_per_lanes = 1
+    #if int(samples_per_lanes) < 1:
+    #    samples_per_lanes = 1
     expected_lanes = samples_count / samples_per_lanes
     if expected_lanes > int(expected_lanes):
         expected_lanes = int(expected_lanes) + 1
@@ -41,7 +41,7 @@ def calculate_expected_lanes(genome_size,coverage,samples_count,is_pe,cluster_si
       update({\
         'output_per_unit':output_per_unit,
         'required_lane_per_sample': round(required_lane_per_sample,4),
-        'samples_per_lanes':int(samples_per_lanes),
+        'samples_per_lanes':float(samples_per_lanes),
         'samples_count':samples_count,
         'expected_lanes':int(expected_lanes),
         'expected_bases_per_sample':int(expected_bases_per_sample)
@@ -83,13 +83,14 @@ def calculate_expected_samples(genome_size,coverage,lanes_count,is_pe,cluster_si
     samples_per_lanes = output_per_unit / expected_bases_per_sample
     if samples_per_lanes > max_samples:
         samples_per_lanes = max_samples
+
     expected_samples = samples_per_lanes * lanes_count
     output_dict = dict()
     output_dict.\
       update({\
         'output_per_unit':output_per_unit,
         'required_lane_per_sample': round(required_lane_per_sample,4),
-        'samples_per_lanes':int(samples_per_lanes),
+        'samples_per_lanes':samples_per_lanes,
         'lanes_count':lanes_count,
         'expected_samples':int(expected_samples),
         'expected_bases_per_sample':int(expected_bases_per_sample)
@@ -212,10 +213,13 @@ def calculate_coverage_output(platform_name,cluster_size,platform_read_length,ch
   '''
   try:
     data_table = dict()
+    total_read_length = platform_read_length
+    if int(is_pe) > 0:
+        total_read_length *= 2
     default_data_table = {
       'Platform name':platform_name,
       'Platform cluster count':cluster_size,
-      'Read length': platform_read_length}
+      'Read length': total_read_length}
     col_order = [\
         'Platform cluster count',
         'Read length']
