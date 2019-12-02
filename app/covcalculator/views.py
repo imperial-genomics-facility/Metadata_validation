@@ -293,9 +293,10 @@ def covcalculator_home():
     else:
       if request.method=='POST':
         flash('Failed: Input validation failed')
-        return render_template(\
-             'covcalculator/sequencing_coverage_calculator.html',
-             form=form)
+        #return render_template(\
+        #     'covcalculator/sequencing_coverage_calculator.html',
+        #     form=form)
+        return redirect(url_for('covcalculator.covcalculator_home'))
 
     if data_table !='' and isinstance(data_table,dict):
       data_table = [data_table]
