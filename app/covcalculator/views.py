@@ -128,7 +128,7 @@ def covcalculator_home():
 
     if data_table !='' and \
        isinstance(data_table,dict) and \
-       len(data_table) > 0:
+       len(data_table.keys()) > 0:
       data_table = [data_table]
       data_table = pd.DataFrame(data_table).set_index('Platform name')
       for header in formatted_header_list:
