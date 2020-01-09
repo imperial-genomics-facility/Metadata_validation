@@ -8,7 +8,7 @@ install:
 - git clone https://github.com/imperial-genomics-facility/data-management-python.git
 - cd -
 - cd $HOME/data-management-python
-- git checkout metadata_201908
+- git checkout master
 - cd -
 - export PYTHONPATH="$HOME/data-management-python:$PYTHONPATH"
 - echo $PYTHONPATH
